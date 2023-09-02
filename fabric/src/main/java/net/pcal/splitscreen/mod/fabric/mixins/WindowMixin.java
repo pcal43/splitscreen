@@ -83,7 +83,10 @@ public abstract class WindowMixin {
 
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     private void Window(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci) {
-        splitscreen_repositionWindow(mod().onWindowCreate(splitscreen_getWindowContext()));
+        // ok so the issue seems to be that this triggers a framebuffersizechanged when it normally wouldn't
+        // minecraftclient is listening for it on resolutionChanged and it isn't ready.  so we probably just need to find
+        // a later time to move the window.
+        //splitscreen_repositionWindow(mod().onWindowCreate(splitscreen_getWindowContext()));
     }
 
     @Inject(method = "toggleFullscreen()V", at = @At("HEAD"), cancellable = true)
@@ -91,6 +94,7 @@ public abstract class WindowMixin {
         final MinecraftWindowContext res = splitscreen_getWindowContext();
         if (res != null) {
             splitscreen_repositionWindow(mod().onToggleFullscreen(res));
+            updateWindowRegion();
         }
         ci.cancel();
     }
@@ -105,6 +109,12 @@ public abstract class WindowMixin {
             }
             // if it's not a splitscreen mode, lets just let minecraft handle it
         }
+    }
+
+    @Inject(method = "updateWindowRegion()V", at = @At("HEAD"))
+    private void splitscreen_updateWindowRegion(CallbackInfo ci) {
+        final WindowDescription wd = mod().onWindowCreate(splitscreen_getWindowContext());
+        splitscreen_repositionWindow(wd);
     }
 
     // ======================================================================
@@ -138,7 +148,7 @@ public abstract class WindowMixin {
                 GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, wd.style() == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
         }
         if (MinecraftClient.getInstance().getWindow() != null) { // true if the game is starting up, will NPE if so
-            updateWindowRegion();
+            //updateWindowRegion();
         }
     }
 }
