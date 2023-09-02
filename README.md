@@ -23,4 +23,4 @@ you to start two or more copies of the game and have the windows be positioned a
 
 ## Acknowledgements
 
-* Icon: https://www.veryicon.com/icons/miscellaneous/xdh-font-graphics-library/form-2-4.html
+* [Squares icons created by Rahul Kaklotar - Flaticon](https://www.flaticon.com/free-icons/squares)
