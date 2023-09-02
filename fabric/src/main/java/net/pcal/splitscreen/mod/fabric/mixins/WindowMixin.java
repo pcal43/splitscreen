@@ -24,6 +24,7 @@
 
 package net.pcal.splitscreen.mod.fabric.mixins;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.WindowEventHandler;
 import net.minecraft.client.WindowSettings;
 import net.minecraft.client.util.Monitor;
@@ -136,6 +137,8 @@ public abstract class WindowMixin {
                 this.windowedHeight = wd.height();
                 GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, wd.style() == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
         }
-        updateWindowRegion();
+        if (MinecraftClient.getInstance().getWindow() != null) { // true if the game is starting up, will NPE if so
+            updateWindowRegion();
+        }
     }
 }
