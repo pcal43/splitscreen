@@ -19,7 +19,7 @@ It saves your choice and brings the window up in the same place when your restar
 you to start two or more copies of Minecraft and have the windows be positioned automatically for splitscreen.
 
 
-![screenshot](https://raw.githubusercontent.com/pcal43/splitscreen/pcal/touchup/etc/screenshot-0.png)
+![screenshot](https://github.com/pcal43/splitscreen/blob/main/etc/screenshot-0.png)
 
 
 
