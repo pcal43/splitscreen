@@ -1,0 +1,38 @@
+
+plugins {
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.2-SNAPSHOT" apply false
+}
+
+
+architectury {
+    minecraft = project.minecraft_version
+}
+
+subprojects {
+    apply plugin: "java-library"
+
+    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    compileJava.options.encoding = compileTestJava.options.encoding = javadoc.options.encoding = "UTF-8"
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://maven.fabricmc.net/' }
+        maven { url 'https://maven.nucleoid.xyz' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    }
+
+    java {
+        withSourcesJar()
+    }
+}
+
+configure(subprojects) {
+    apply plugin: "architectury-plugin"
+    apply plugin: "dev.architectury.loom"
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${project.minecraft_version}"
+        mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    }
+}
