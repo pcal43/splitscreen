@@ -2,9 +2,8 @@
 
 Simple mod that makes it easier to position windows for local multiplayer.
 
-With this mod installed, hitting the 'Toggle Fullscreen' button (F11) will toggle you between the following modes:
+With this mod installed, hitting the 'Toggle Fullscreen' button (F11) will cycle you through different window positions for split screen play:
 
-* Windowed
 * Top half of screen, no border
 * Bottom half...
 * Left...
@@ -13,6 +12,7 @@ With this mod installed, hitting the 'Toggle Fullscreen' button (F11) will toggl
 * Top-Right
 * Bottom-Left
 * Bottom-Right
+* Normal Windowed
 * Full Screen
 
 It saves your choice and brings the window up in the same place when your restart it.  This makes it easier for

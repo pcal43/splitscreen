@@ -101,14 +101,13 @@ public abstract class WindowMixin {
     @Inject(method = "onFramebufferSizeChanged(JII)V", at = @At("HEAD"))
     private void onFramebufferSizeChanged(long window, int width, int height, CallbackInfo ci) {
         if (window == this.handle) {
-            final WindowDescription wd = mod().onWindowCreate(splitscreen_getWindowContext());
+            final WindowDescription wd = mod().onResolutionChange(splitscreen_getWindowContext());
             if (wd.style() == WindowStyle.SPLITSCREEN) {
                 splitscreen_repositionWindow(wd);
             }
             // if it's not a splitscreen mode, lets just let minecraft handle it
         }
     }
-
 
     // ======================================================================
     // Private
