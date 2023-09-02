@@ -15,8 +15,11 @@ With this mod installed, hitting the 'Toggle Fullscreen' button (F11) will cycle
 * Normal Windowed
 * Full Screen
 
-It saves your choice and brings the window up in the same place when your restart it.  This makes it easier for
-you to start two or more copies of the game and have the windows be positioned automatically for splitscreen.
+It saves your choice and brings the window up in the same place when your restart the game.  This makes it easier for
+you to start two or more copies of Minecraft and have the windows be positioned automatically for splitscreen.
+
+
+![screenshot](https://raw.githubusercontent.com/pcal43/splitscreen/pcal/touchup/etc/screenshot-0.png)
 
 
 
