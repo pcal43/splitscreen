@@ -80,9 +80,6 @@ public abstract class WindowMixin {
     // ======================================================================
     // Mixins
 
-    /**
-     * Intercept save so we can hard-disable saving during critical parts of the backup.
-     */
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     private void Window(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci) {
         splitscreen_repositionWindow(mod().onWindowCreate(splitscreen_getWindowContext()));
@@ -141,5 +138,4 @@ public abstract class WindowMixin {
         }
         updateWindowRegion();
     }
-
 }
