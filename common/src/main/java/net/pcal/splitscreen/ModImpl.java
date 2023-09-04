@@ -54,7 +54,7 @@ class ModImpl implements Mod {
     private Path configPath;
 
     private int currentModeIndex = 0;
-    private Rectangle savedWindowSize;
+    private Rectangle savedWindowRect;
 
     ModImpl() {
         this.modes = WindowModeImpl.getModes();
@@ -97,12 +97,13 @@ class ModImpl implements Mod {
     }
 
     @Override
-    public WindowDescription onToggleFullscreen(final MinecraftWindowContext res) {
-        if (this.savedWindowSize == null || modes.get(currentModeIndex).getFor(res).style() == WindowStyle.WINDOWED) {
-            this.savedWindowSize = res.savedWindowSize();
+    public WindowDescription onToggleFullscreen(final MinecraftWindowContext mcContext) {
+        if (this.savedWindowRect == null || modes.get(currentModeIndex).getFor(mcContext).style() == WindowStyle.WINDOWED) {
+            this.savedWindowRect = mcContext.windowRect();
         }
         currentModeIndex = (currentModeIndex + 1) % modes.size();
-        return this.modes.get(currentModeIndex).getFor(new MinecraftWindowContext(res.screenWidth(), res.screenHeight(), savedWindowSize));
+        final MinecraftWindowContext ctx = new MinecraftWindowContext(mcContext.screenWidth(), mcContext.screenHeight(), this.savedWindowRect);
+        return this.modes.get(currentModeIndex).getFor(ctx);
     }
 
     @Override

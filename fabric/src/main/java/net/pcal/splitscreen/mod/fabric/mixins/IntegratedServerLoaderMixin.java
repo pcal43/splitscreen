@@ -16,6 +16,10 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class IntegratedServerLoaderMixin {
     @Shadow protected abstract void start(Screen parent, String levelName, boolean safeMode, boolean canShowBackupPrompt);
 
+    /**
+     * @author pcal
+     * @reason They know what they're doing.
+     */
     @Overwrite
     public void start(Screen parent, String levelName) {
         final boolean safeMode = false;

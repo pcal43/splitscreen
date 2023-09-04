@@ -81,6 +81,8 @@ public abstract class WindowMixin {
     // ======================================================================
     // Mixins
 
+    @Shadow public abstract void swapBuffers();
+
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     private void Window(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci) {
         // ok so the issue seems to be that this triggers a framebuffersizechanged when it normally wouldn't
@@ -98,7 +100,6 @@ public abstract class WindowMixin {
         }
         ci.cancel();
     }
-
 
     @Inject(method = "onFramebufferSizeChanged(JII)V", at = @At("HEAD"))
     private void onFramebufferSizeChanged(long window, int width, int height, CallbackInfo ci) {
@@ -145,10 +146,12 @@ public abstract class WindowMixin {
                 this.windowedY = wd.y();
                 this.windowedWidth = wd.width();
                 this.windowedHeight = wd.height();
+                this.x = this.windowedX;
+                this.y = this.windowedY;
+                this.width = this.windowedWidth;
+                this.height = this.windowedHeight;
+                GLFW.glfwSetWindowMonitor(this.handle, 0L, this.x, this.y, this.width, this.height, -1);
                 GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, wd.style() == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
-        }
-        if (MinecraftClient.getInstance().getWindow() != null) { // true if the game is starting up, will NPE if so
-            //updateWindowRegion();
         }
     }
 }

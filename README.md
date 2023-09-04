@@ -26,4 +26,5 @@ you to start two or more copies of Minecraft and have the windows be positioned 
 
 ## Acknowledgements
 
-* [Squares icons created by Rahul Kaklotar - Flaticon](https://www.flaticon.com/free-icons/squares)
+* Icon based on [Squares icons created by Rahul Kaklotar - Flaticon](https://www.flaticon.com/free-icons/squares)
+* 
