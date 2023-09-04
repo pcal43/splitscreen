@@ -24,7 +24,6 @@
 
 package net.pcal.splitscreen.mod.fabric.mixins;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.WindowEventHandler;
 import net.minecraft.client.WindowSettings;
 import net.minecraft.client.util.Monitor;
@@ -60,28 +59,46 @@ import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 @Mixin(Window.class)
 public abstract class WindowMixin {
 
-    @Final @Shadow private long handle;
-    @Shadow private int windowedX;
-    @Shadow private int windowedY;
-    @Shadow private int windowedWidth;
-    @Shadow private int windowedHeight;
-    @Shadow private int x;
-    @Shadow private int y;
-    @Shadow private int width;
-    @Shadow private int height;
-    @Shadow private boolean fullscreen;
-    @Shadow private Optional<VideoMode> videoMode;
+    @Final
+    @Shadow
+    private long handle;
+    @Shadow
+    private int windowedX;
+    @Shadow
+    private int windowedY;
+    @Shadow
+    private int windowedWidth;
+    @Shadow
+    private int windowedHeight;
+    @Shadow
+    private int x;
+    @Shadow
+    private int y;
+    @Shadow
+    private int width;
+    @Shadow
+    private int height;
+    @Shadow
+    private boolean fullscreen;
+    @Shadow
+    private Optional<VideoMode> videoMode;
 
 
-    @Shadow public abstract boolean isFullscreen();
-    @Shadow protected abstract void updateWindowRegion();
+    @Shadow
+    public abstract boolean isFullscreen();
 
-    @Shadow @Nullable public abstract Monitor getMonitor();
+    @Shadow
+    protected abstract void updateWindowRegion();
+
+    @Shadow
+    @Nullable
+    public abstract Monitor getMonitor();
 
     // ======================================================================
     // Mixins
 
-    @Shadow public abstract void swapBuffers();
+    @Shadow
+    public abstract void swapBuffers();
 
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     private void Window(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci) {
@@ -135,7 +152,7 @@ public abstract class WindowMixin {
 
     @Unique
     private void splitscreen_repositionWindow(WindowDescription wd) {
-        switch(wd.style()) {
+        switch (wd.style()) {
             case FULLSCREEN:
                 this.fullscreen = true;
                 break;

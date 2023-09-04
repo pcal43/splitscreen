@@ -83,7 +83,7 @@ curseforge {
         changelog = "https://github.com/pcal43/splitscreen/releases/tag/${project.mod_version}"
         changelogType = "markdown"
         mod_version = project.mod_version
-        addGameVersion ((String) project.minecraft_version)
+        addGameVersion((String) project.minecraft_version)
         addGameVersion "Fabric"
         mainArtifact(remapJar)
         afterEvaluate {

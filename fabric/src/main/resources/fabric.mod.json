@@ -4,8 +4,9 @@
   "version": "${version}",
   "name": "Splitscreen Support",
   "description": "Easier Window Positioning for Local Multiplayer",
-  "authors": ["pcal.net"],
-
+  "authors": [
+    "pcal.net"
+  ],
   "contact": {
     "homepage": "https://github.com/pcal43/splitscreen",
     "sources": "https://github.com/pcal43/splitscreen"

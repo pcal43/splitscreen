@@ -57,7 +57,8 @@ public interface WindowMode {
     }
 
 
-    record WindowContext(MinecraftWindowContext mcContext, Rectangle savedWindowSize) {}
+    record WindowContext(MinecraftWindowContext mcContext, Rectangle savedWindowSize) {
+    }
 
     record Rectangle(int x, int y, int width, int height) {
     }

@@ -38,7 +38,8 @@ import org.spongepowered.asm.mixin.Shadow;
  */
 @Mixin(IntegratedServerLoader.class)
 public abstract class IntegratedServerLoaderMixin {
-    @Shadow protected abstract void start(Screen parent, String levelName, boolean safeMode, boolean canShowBackupPrompt);
+    @Shadow
+    protected abstract void start(Screen parent, String levelName, boolean safeMode, boolean canShowBackupPrompt);
 
     /**
      * @author pcal
