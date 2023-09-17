@@ -21,7 +21,7 @@ you to start two or more copies of Minecraft and have the windows be positioned 
 
 ## Other features
 
-* Username is displayed in the upper-left corner (so you can tell which window is which)
+* Username is displayed in the upper-left corner of the main menu (so you can tell which window is which)
 * Skips the 'I Know What I'm Doing' backup screen
 
 ![System](https://github.com/pcal43/splitscreen/blob/main/etc/screenshot-0.png?raw=true)
