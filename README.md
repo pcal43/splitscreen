@@ -9,34 +9,40 @@ restart the game.
 This makes it easier for you to start two or more copies of Minecraft and have the windows be positioned automatically 
 for splitscreen.
 
-## Other features
 
-* Username is displayed in the upper-left corner of the main menu (so you can tell which window is which)
-* Skips the 'I Know What I'm Doing' backup screen
+## Usage Video
 
-![System](https://github.com/pcal43/splitscreen/blob/main/etc/screenshot-0.png?raw=true)
+![Movie](https://github.com/pcal43/splitscreen/blob/pcal/readme-updates/etc/movie-thumb.png?raw=true)](https://youtu.be/QtsTT2dEED0)
 
-## How to Video
+## Suggested Setup 
 
-![Movie](link to image on GH)](https://youtu.be/QtsTT2dEED0)
+### Stuff you need
+* Two or more copies of minecraft
+* [PrismLauncher](https://prismlauncher.org/)
+* [Midnight Controls](https://modrinth.com/mod/midnightcontrols)
+* [Splitscreen Support](https://modrinth.com/mod/splitscreen)
+* Two or more gamepads
+* One big TV hooked up to your computer
+* One couch
+* One or more friends
 
 
-## Suggested Use
-
-* Download [PrismLauncher](https://prismlauncher.org/)
-* Create two or more minecraft instances
-* In each instance, install
-  * Splitscreen Support (this mod)
-  * [Midnight Controls](https://modrinth.com/mod/midnightcontrols)
+### What to do
+* Create two or more minecraft instances in PrismLauncher, one for each account
+* In each instance, install SplitScreen Support and MidnightControls
 * Launch each of the instances and configure them 
   * Hit F11 to get the screens aligned in each one
   * Get a gamepad for each instance and configure MidnightControls
-* Get some friends and a couch
-* Have a Minecraft party!
+* In one of the instances, create a new world and 'Open to LAN'
+* Connect the other instances to that one (e.g., localhost:25565)
+* Get your friends and have a Minecraft party!
 
+## Other mod features
+* Username is displayed in the upper-left corner of the main menu (so you can tell which window is which)
+* Skips the 'I Know What I'm Doing' backup screen
 
 ## Acknowledgements
-
+* Video courtesy of [wormstweaker](https://www.youtube.com/@WORMSTweaker)
 * Icon based on [Squares icons created by Rahul Kaklotar - Flaticon](https://www.flaticon.com/free-icons/squares)
 
 ## Questions?
@@ -46,3 +52,5 @@ If you have questions about this mod, please join the Discord server:
 [https://discord.pcal.net](https://discord.pcal.net)
 
 Comments have been disabled and I will **not** reply to private messages on Curseforge.
+
+![System](https://github.com/pcal43/splitscreen/blob/main/etc/screenshot-0.png?raw=true)
