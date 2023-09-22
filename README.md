@@ -2,22 +2,17 @@
 
 Simple mod that makes it easier to position windows for local multiplayer.
 
-With this mod installed, hitting the 'Toggle Fullscreen' button (F11) will cycle you through different window positions
-for split screen play:
+With this mod installed, hitting the 'Toggle Fullscreen' button (F11) will cycle you through different half- and quarter-size
+window positions for split screen play.  It then saves your choice and brings the window up in the same place when you
+restart the game. 
 
-* Top half of screen, no border
-* Bottom half...
-* Left...
-* Right
-* Top-Left
-* Top-Right
-* Bottom-Left
-* Bottom-Right
-* Normal Windowed
-* Full Screen
+This makes it easier for you to start two or more copies of Minecraft and have the windows be positioned automatically 
+for splitscreen.
 
-It saves your choice and brings the window up in the same place when your restart the game. This makes it easier for
-you to start two or more copies of Minecraft and have the windows be positioned automatically for splitscreen.
+
+
+![](https://youtu.be/QtsTT2dEED0)
+
 
 ## Other features
 
@@ -25,6 +20,24 @@ you to start two or more copies of Minecraft and have the windows be positioned 
 * Skips the 'I Know What I'm Doing' backup screen
 
 ![System](https://github.com/pcal43/splitscreen/blob/main/etc/screenshot-0.png?raw=true)
+
+
+
+
+
+## Suggested Use
+
+* Download [PrismLauncher](https://prismlauncher.org/)
+* Create two or more minecraft instances
+* In each instance, install
+  * Splitscreen Support (this mod)
+  * [Midnight Controls](https://modrinth.com/mod/midnightcontrols)
+* Launch each of the instances and configure them 
+  * Hit F11 to get the screens aligned in each one
+  * Get a gamepad for each instance and configure MidnightControls
+* Get some friends and a couch
+* Have a Minecraft party!
+
 
 ## Acknowledgements
 
