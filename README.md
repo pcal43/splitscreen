@@ -12,7 +12,7 @@ for splitscreen.
 
 ## Usage Video
 
-![Movie](https://github.com/pcal43/splitscreen/blob/pcal/readme-updates/etc/movie-thumb.png?raw=true)](https://youtu.be/QtsTT2dEED0)
+![(https://github.com/pcal43/splitscreen/blob/pcal/readme-updates/etc/movie-thumb.png?raw=true)](https://youtu.be/QtsTT2dEED0)
 
 ## Suggested Setup 
 
