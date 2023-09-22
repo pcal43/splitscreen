@@ -9,11 +9,6 @@ restart the game.
 This makes it easier for you to start two or more copies of Minecraft and have the windows be positioned automatically 
 for splitscreen.
 
-
-
-![](https://youtu.be/QtsTT2dEED0)
-
-
 ## Other features
 
 * Username is displayed in the upper-left corner of the main menu (so you can tell which window is which)
@@ -21,8 +16,9 @@ for splitscreen.
 
 ![System](https://github.com/pcal43/splitscreen/blob/main/etc/screenshot-0.png?raw=true)
 
+## How to Video
 
-
+![Movie](link to image on GH)](https://youtu.be/QtsTT2dEED0)
 
 
 ## Suggested Use
