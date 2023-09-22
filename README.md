@@ -9,7 +9,6 @@ restart the game.
 This makes it easier for you to start two or more copies of Minecraft and have the windows be positioned automatically 
 for splitscreen.
 
-
 ## Usage Video
 
 [![Video](https://github.com/pcal43/splitscreen/blob/pcal/readme-updates/etc/movie-thumb.png?raw=true)](https://youtu.be/QtsTT2dEED0)
@@ -22,10 +21,9 @@ for splitscreen.
 * [Midnight Controls](https://modrinth.com/mod/midnightcontrols)
 * [Splitscreen Support](https://modrinth.com/mod/splitscreen)
 * Two or more gamepads
+* One or more friends
 * One big TV hooked up to your computer
 * One couch
-* One or more friends
-
 
 ### What to do
 * Create two or more minecraft instances in PrismLauncher, one for each account
@@ -38,7 +36,7 @@ for splitscreen.
 * Get your friends and have a Minecraft party!
 
 ## Other mod features
-* Username is displayed in the upper-left corner of the main menu (so you can tell which window is which)
+* Username is displayed in the upper-left corner of the main menu (so you can tell who's who)
 * Skips the 'I Know What I'm Doing' backup screen
 
 ## Acknowledgements
