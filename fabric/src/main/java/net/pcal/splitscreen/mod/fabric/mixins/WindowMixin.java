@@ -30,6 +30,7 @@ import net.minecraft.client.util.Monitor;
 import net.minecraft.client.util.MonitorTracker;
 import net.minecraft.client.util.VideoMode;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.Window.GlErroredException;
 import net.pcal.splitscreen.WindowMode.MinecraftWindowContext;
 import net.pcal.splitscreen.WindowMode.Rectangle;
 import net.pcal.splitscreen.WindowMode.WindowDescription;
@@ -100,6 +101,8 @@ public abstract class WindowMixin {
     @Shadow
     public abstract void swapBuffers();
 
+    @Shadow @Final private MonitorTracker monitorTracker;
+
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     private void Window(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci) {
         // ok so the issue seems to be that this triggers a framebuffersizechanged when it normally wouldn't
@@ -119,7 +122,7 @@ public abstract class WindowMixin {
     }
 
     @Inject(method = "onFramebufferSizeChanged(JII)V", at = @At("HEAD"))
-    private void onFramebufferSizeChanged(long window, int width, int height, CallbackInfo ci) {
+    private void splitscreen_onFramebufferSizeChanged(long window, int width, int height, CallbackInfo ci) {
         if (window == this.handle) {
             final WindowDescription wd = mod().onResolutionChange(splitscreen_getWindowContext());
             if (wd.style() == WindowStyle.SPLITSCREEN) {
@@ -128,6 +131,28 @@ public abstract class WindowMixin {
             // if it's not a splitscreen mode, lets just let minecraft handle it
         }
     }
+
+    @Inject(method = "applyVideoMode()V", at = @At("HEAD"))
+    public void splitscreen_applyVideoMode(CallbackInfo ci) {
+        final WindowDescription wd = mod().onResolutionChange(splitscreen_getWindowContext());
+        if (wd.style() == WindowStyle.SPLITSCREEN) {
+            splitscreen_repositionWindow(wd);
+            ci.cancel();
+        }
+    }
+
+
+    // THIS IS THE ONLY THING THAT GETS CALLED WHEN RESOLUTION CHANGES.  CANT FIGURE OUT HOW TO GET ACTUAL MONITOR
+    // DIMENSIONS...CRAP IT DOESNT ACTUALLY ALWAYS DO IT - BASICALLY ONLY IF THE SCREENSIZE CHANGE RESULTS IN THE WINDOW
+    // MOVING...
+    @Inject(method = "onWindowSizeChanged(JII)V", at = @At("TAIL"))
+    public void splitscreen_onWindowSizeChanged(long window, int width, int height, CallbackInfo ci) {
+        final WindowDescription wd = mod().onResolutionChange(splitscreen_getWindowContext());
+        if (wd.style() == WindowStyle.SPLITSCREEN) {
+            splitscreen_repositionWindow(wd);
+        }
+    }
+
 
     @Inject(method = "updateWindowRegion()V", at = @At("HEAD"))
     private void splitscreen_updateWindowRegion(CallbackInfo ci) {
@@ -140,14 +165,21 @@ public abstract class WindowMixin {
 
     @Unique
     private MinecraftWindowContext splitscreen_getWindowContext() {
-        final Monitor monitor = this.getMonitor();
+        final Monitor monitor = this.monitorTracker.getMonitor((Window)(Object)this);; //this.getMonitor();
+        monitor.populateVideoModes();
+        VideoMode mode = monitor.getCurrentVideoMode();
+
+        System.out.println(mode);
         if (monitor == null) {
             syslog().warn("could not determine monitor");
             return null;
         }
         final VideoMode videoMode = getMonitor().findClosestVideoMode(this.videoMode);
         final Rectangle currentWindow = new Rectangle(x, y, width, height);
-        return new MinecraftWindowContext(videoMode.getWidth(), videoMode.getHeight(), currentWindow);
+
+        MinecraftWindowContext out = new MinecraftWindowContext(videoMode.getWidth(), videoMode.getHeight(), currentWindow);
+        syslog().info("================ mc window context: "+out+ " "+videoMode);
+        return out;
     }
 
     @Unique
