@@ -24,12 +24,6 @@
 
 package net.pcal.splitscreen.mod.fabric.mixins;
 
-import net.minecraft.client.WindowEventHandler;
-import net.minecraft.client.WindowSettings;
-import net.minecraft.client.util.Monitor;
-import net.minecraft.client.util.MonitorTracker;
-import net.minecraft.client.util.VideoMode;
-import net.minecraft.client.util.Window;
 import net.pcal.splitscreen.WindowMode.MinecraftWindowContext;
 import net.pcal.splitscreen.WindowMode.Rectangle;
 import net.pcal.splitscreen.WindowMode.WindowDescription;
@@ -52,6 +46,13 @@ import static org.lwjgl.glfw.GLFW.GLFW_DECORATED;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 
+import com.mojang.blaze3d.platform.DisplayData;
+import com.mojang.blaze3d.platform.Monitor;
+import com.mojang.blaze3d.platform.ScreenManager;
+import com.mojang.blaze3d.platform.VideoMode;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.platform.WindowEventHandler;
+
 /**
  * @author pcal
  * @since 0.0.1
@@ -61,7 +62,7 @@ public abstract class WindowMixin {
 
     @Final
     @Shadow
-    private long handle;
+    private long window;
     @Shadow
     private int windowedX;
     @Shadow
@@ -81,46 +82,46 @@ public abstract class WindowMixin {
     @Shadow
     private boolean fullscreen;
     @Shadow
-    private Optional<VideoMode> videoMode;
+    private Optional<VideoMode> preferredFullscreenVideoMode;
 
 
     @Shadow
     public abstract boolean isFullscreen();
 
     @Shadow
-    protected abstract void updateWindowRegion();
+    protected abstract void setMode();
 
     @Shadow
     @Nullable
-    public abstract Monitor getMonitor();
+    public abstract Monitor findBestMonitor();
 
     // ======================================================================
     // Mixins
 
     @Shadow
-    public abstract void swapBuffers();
+    public abstract void updateDisplay();
 
     @Inject(method = "<init>", at = @At(value = "TAIL"))
-    private void Window(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci) {
+    private void Window(WindowEventHandler eventHandler, ScreenManager monitorTracker, DisplayData settings, String videoMode, String title, CallbackInfo ci) {
         // ok so the issue seems to be that this triggers a framebuffersizechanged when it normally wouldn't
         // minecraftclient is listening for it on resolutionChanged and it isn't ready.  so we probably just need to find
         // a later time to move the window.
         //splitscreen_repositionWindow(mod().onWindowCreate(splitscreen_getWindowContext()));
     }
 
-    @Inject(method = "toggleFullscreen()V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "toggleFullScreen()V", at = @At("HEAD"), cancellable = true)
     public void splitscreen_toggleFullScreen(CallbackInfo ci) {
         final MinecraftWindowContext res = splitscreen_getWindowContext();
         if (res != null) {
             splitscreen_repositionWindow(mod().onToggleFullscreen(res));
-            updateWindowRegion();
+            setMode();
         }
         ci.cancel();
     }
 
-    @Inject(method = "onFramebufferSizeChanged(JII)V", at = @At("HEAD"))
+    @Inject(method = "onFramebufferResize(JII)V", at = @At("HEAD"))
     private void onFramebufferSizeChanged(long window, int width, int height, CallbackInfo ci) {
-        if (window == this.handle) {
+        if (window == this.window) {
             final WindowDescription wd = mod().onResolutionChange(splitscreen_getWindowContext());
             if (wd.style() == WindowStyle.SPLITSCREEN) {
                 splitscreen_repositionWindow(wd);
@@ -129,7 +130,7 @@ public abstract class WindowMixin {
         }
     }
 
-    @Inject(method = "updateWindowRegion()V", at = @At("HEAD"))
+    @Inject(method = "setMode()V", at = @At("HEAD"))
     private void splitscreen_updateWindowRegion(CallbackInfo ci) {
         final WindowDescription wd = mod().onWindowCreate(splitscreen_getWindowContext());
         splitscreen_repositionWindow(wd);
@@ -140,12 +141,12 @@ public abstract class WindowMixin {
 
     @Unique
     private MinecraftWindowContext splitscreen_getWindowContext() {
-        final Monitor monitor = this.getMonitor();
+        final Monitor monitor = this.findBestMonitor();
         if (monitor == null) {
             syslog().warn("could not determine monitor");
             return null;
         }
-        final VideoMode videoMode = getMonitor().findClosestVideoMode(this.videoMode);
+        final VideoMode videoMode = findBestMonitor().getPreferredVidMode(this.preferredFullscreenVideoMode);
         final Rectangle currentWindow = new Rectangle(x, y, width, height);
         return new MinecraftWindowContext(videoMode.getWidth(), videoMode.getHeight(), currentWindow);
     }
@@ -167,8 +168,8 @@ public abstract class WindowMixin {
                 this.y = this.windowedY;
                 this.width = this.windowedWidth;
                 this.height = this.windowedHeight;
-                GLFW.glfwSetWindowMonitor(this.handle, 0L, this.x, this.y, this.width, this.height, -1);
-                GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, wd.style() == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
+                GLFW.glfwSetWindowMonitor(this.window, 0L, this.x, this.y, this.width, this.height, -1);
+                GLFW.glfwSetWindowAttrib(this.window, GLFW_DECORATED, wd.style() == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
         }
     }
 }

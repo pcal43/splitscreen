@@ -24,11 +24,11 @@
 
 package net.pcal.splitscreen.mod.fabric.mixins;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.widget.TextWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -42,13 +42,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
-    protected TitleScreenMixin(Text text) {
+    protected TitleScreenMixin(Component text) {
         super(text);
     }
 
     @Inject(method = "init", at = @At("RETURN"))
     private void addText(CallbackInfo ci) {
-        final Text text = Text.literal(MinecraftClient.getInstance().getSession().getUsername());
-        addDrawableChild(new TextWidget(4, 4, textRenderer.getWidth(text), 10, text, this.textRenderer));
+        final Component text = Component.literal(Minecraft.getInstance().getUser().getName());
+        addRenderableWidget(new StringWidget(4, 4, font.width(text), 10, text, this.font));
     }
 }
