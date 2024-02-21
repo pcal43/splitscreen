@@ -27,8 +27,6 @@ package net.pcal.splitscreen.mod.fabric.mixins;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.WorldOpenFlows;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
 /**
  * Disables the annoying 'I know what I'm Doing!' prompt screen.
@@ -39,14 +37,12 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(WorldOpenFlows.class)
 public abstract class IntegratedServerLoaderMixin {
 
-    @Shadow
     protected abstract void doLoadLevel(Screen screen, String levelName, boolean safeMode, boolean canShowBackupPrompt);
 
     /**
      * @author pcal
      * @reason They know what they're doing.
      */
-    @Overwrite
     public void loadLevel(Screen screen, String levelName) {
         final boolean safeMode = false;
         this.doLoadLevel(screen, levelName, safeMode, false);
