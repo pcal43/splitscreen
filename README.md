@@ -37,7 +37,6 @@ for splitscreen.
 
 ## Other mod features
 * Username is displayed in the upper-left corner of the main menu (so you can tell who's who)
-* Skips the 'I Know What I'm Doing' backup screen
 
 ## Acknowledgements
 * Video courtesy of [wormstweaker](https://www.youtube.com/@WORMSTweaker)

@@ -4,7 +4,6 @@
   "package": "net.pcal.splitscreen.mod.fabric.mixins",
   "compatibilityLevel": "JAVA_16",
   "client": [
-    "IntegratedServerLoaderMixin",
     "TitleScreenMixin",
     "WindowMixin"
   ],
