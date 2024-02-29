@@ -35,6 +35,8 @@ classes/
 
 # fabric
 
+fabric/bin/
+common/bin
 run/
 logs/
 

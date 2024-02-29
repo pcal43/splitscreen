@@ -16,6 +16,9 @@
   "entrypoints": {
     "client": [
       "net.pcal.splitscreen.mod.fabric.FabricClientInitializer"
+    ],
+    "modmenu": [
+      "net.pcal.splitscreen.config.ModMenuIntegration"
     ]
   },
   "mixins": [
