@@ -1,0 +1,16 @@
+{
+    "splitscreen.config.title": "Splitscreen Mod",
+    "splitscreen.config.settings" : "Settings",
+    "splitscreen.config.gap.label" : "Window Gap",
+    "splitscreen.config.window_mode.label": "Window Window Position",
+    "splitscreen.config.modes.windowed": "Windowed",
+    "splitscreen.config.modes.left": "Left",
+    "splitscreen.config.modes.right": "Right",
+    "splitscreen.config.modes.top": "Top",
+    "splitscreen.config.modes.bottom": "Bottom",
+    "splitscreen.config.modes.top_left": "Top Left",
+    "splitscreen.config.modes.top_right": "Top Right",
+    "splitscreen.config.modes.bottom_left": "Bottom Left",
+    "splitscreen.config.modes.bottom_right": "Bottom Right",
+    "splitscreen.config.modes.fullscreen": "Fullscreen"
+}

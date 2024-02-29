@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import net.pcal.splitscreen.config.ConfigHandler;
+
 import static net.pcal.splitscreen.WindowMode.WindowStyle.FULLSCREEN;
 import static net.pcal.splitscreen.WindowMode.WindowStyle.SPLITSCREEN;
 import static net.pcal.splitscreen.WindowMode.WindowStyle.WINDOWED;
@@ -36,7 +38,7 @@ import static net.pcal.splitscreen.WindowMode.WindowStyle.WINDOWED;
  * @author pcal
  * @since 0.0.1
  */
-record WindowModeImpl(
+public record WindowModeImpl(
         String name,
         WindowStyle style,
         Function<MinecraftWindowContext, Integer> xFn,
@@ -54,24 +56,27 @@ record WindowModeImpl(
         return new WindowDescription(style, xFn.apply(res), yFn.apply(res), widthFn.apply(res), heightFn.apply(res));
     }
 
-    static List<WindowMode> getModes() {
+    public static List<WindowMode> getModes() {
+        return getModes(ConfigHandler.get().screenGap);
+    }
+
+    public static List<WindowMode> getModes(int gap) {
         final List<WindowMode> modes = new ArrayList<>();
-        final int gap = 2; // TODO make this configurable
         addMode(modes, "WINDOWED", WINDOWED, r -> r.windowRect().x(), r -> r.windowRect().y(),
                 r -> r.windowRect().width(), r -> r.windowRect().height());
-        addMode(modes, "LEFT", SPLITSCREEN, r -> 0, r -> 0, r -> r.screenWidth() / 2 - gap, r -> r.screenHeight());
-        addMode(modes, "RIGHT", SPLITSCREEN, r -> r.screenWidth() / 2 + gap, r -> 0, r -> r.screenWidth() / 2 - gap, r -> r.screenHeight());
-        addMode(modes, "TOP", SPLITSCREEN, r -> 0, r -> 0, r -> r.screenWidth(), r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "BOTTOM", SPLITSCREEN, r -> 0, r -> r.screenHeight() / 2 + gap, r -> r.screenWidth(), r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "TOP_LEFT", SPLITSCREEN, r -> 0, r -> 0,
+                addMode(modes, "LEFT", SPLITSCREEN, r -> 0, r -> 0, r -> r.screenWidth() / 2 - gap, r -> r.screenHeight());
+                addMode(modes, "RIGHT", SPLITSCREEN, r -> r.screenWidth() / 2 + gap, r -> 0, r -> r.screenWidth() / 2 - gap, r -> r.screenHeight());
+                addMode(modes, "TOP", SPLITSCREEN, r -> 0, r -> 0, r -> r.screenWidth(), r -> r.screenHeight() / 2 - gap);
+                addMode(modes, "BOTTOM", SPLITSCREEN, r -> 0, r -> r.screenHeight() / 2 + gap, r -> r.screenWidth(), r -> r.screenHeight() / 2 - gap);
+                addMode(modes, "TOP_LEFT", SPLITSCREEN, r -> 0, r -> 0,
                 r -> r.screenWidth() / 2 - gap, r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "TOP_RIGHT", SPLITSCREEN, r -> r.screenWidth() / 2 + gap, r -> 0,
+                addMode(modes, "TOP_RIGHT", SPLITSCREEN, r -> r.screenWidth() / 2 + gap, r -> 0,
                 r -> r.screenWidth() / 2 - gap, r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "BOTTOM_LEFT", SPLITSCREEN, r -> 0, r -> r.screenHeight() / 2 + gap,
+                addMode(modes, "BOTTOM_LEFT", SPLITSCREEN, r -> 0, r -> r.screenHeight() / 2 + gap,
                 r -> r.screenWidth() / 2 - gap, r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "BOTTOM_RIGHT", SPLITSCREEN, r -> r.screenWidth() / 2 + gap, r -> r.screenHeight() / 2 + gap,
+                addMode(modes, "BOTTOM_RIGHT", SPLITSCREEN, r -> r.screenWidth() / 2 + gap, r -> r.screenHeight() / 2 + gap,
                 r -> r.screenWidth() / 2 - gap, r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "FULLSCREEN", FULLSCREEN, no(), no(), no(), no());
+                addMode(modes, "FULLSCREEN", FULLSCREEN, no(), no(), no(), no());
         return modes;
     }
 

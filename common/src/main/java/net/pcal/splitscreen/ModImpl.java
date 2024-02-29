@@ -24,17 +24,19 @@
 
 package net.pcal.splitscreen;
 
+import net.minecraft.client.Minecraft;
 import net.pcal.splitscreen.WindowMode.MinecraftWindowContext;
 import net.pcal.splitscreen.WindowMode.Rectangle;
 import net.pcal.splitscreen.WindowMode.WindowDescription;
 import net.pcal.splitscreen.WindowMode.WindowStyle;
+import net.pcal.splitscreen.config.ConfigHandler;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Properties;
+
+import com.mojang.blaze3d.platform.Window;
+
+import java.lang.reflect.Method;
 
 import static net.pcal.splitscreen.logging.SystemLogger.syslog;
 
@@ -47,11 +49,7 @@ class ModImpl implements Mod {
     // ======================================================================
     // Fields
 
-    private static final String MODE_PROP = "mode";
-
-    private final List<WindowMode> modes;
-    private Properties config;
-    private Path configPath;
+    private List<WindowMode> modes;
 
     private int currentModeIndex = 0;
     private Rectangle savedWindowRect;
@@ -65,30 +63,42 @@ class ModImpl implements Mod {
 
     @Override
     public void onInitialize(Path configDirPath) {
-        this.configPath = configDirPath.resolve("splitscreen.properties");
-        this.config = new Properties();
-        if (this.configPath.toFile().exists()) {
-            try (final FileReader fr = new FileReader(this.configPath.toFile())) {
-                this.config.load(fr);
-            } catch (IOException e) {
-                syslog().error(e);
-            }
-        }
+        ConfigHandler.load();
+        updateModeIndex(ConfigHandler.get().mode);
+    }
+
+    public void updateModeIndex(String modeName) {
         try {
-            String modeConfig = config.getProperty(MODE_PROP);
-            if (modeConfig != null) {
-                modeConfig = modeConfig.trim();
+            if (modeName != null) {
+                modeName = modeName.trim();
                 for (this.currentModeIndex = 0; this.currentModeIndex < this.modes.size(); this.currentModeIndex++) {
-                    if (modeConfig.equals(modes.get(currentModeIndex).getName())) break;
+                    if (modeName.equals(modes.get(currentModeIndex).getName())) break;
                 }
                 if (currentModeIndex >= this.modes.size()) {
-                    syslog().warn("unknown mode " + modeConfig);
+                    syslog().warn("unknown mode " + modeName);
                     currentModeIndex = 0;
                 }
             }
         } catch (Exception e) {
             syslog().error(e);
         }
+    }
+
+    private void updateWindow() {
+        try {
+            Method m = Window.class.getDeclaredMethod("setMode");
+            m.setAccessible(true);
+            m.invoke(Minecraft.getInstance().getWindow());
+        } catch (Exception e) {
+            syslog().error(e);
+        }
+    }
+
+    @Override
+    public void onUpdateConfig() {
+        this.modes = WindowModeImpl.getModes();
+        updateModeIndex(ConfigHandler.get().mode);
+        updateWindow();
     }
 
     @Override
@@ -103,6 +113,7 @@ class ModImpl implements Mod {
         }
         currentModeIndex = (currentModeIndex + 1) % modes.size();
         final MinecraftWindowContext ctx = new MinecraftWindowContext(mcContext.screenWidth(), mcContext.screenHeight(), this.savedWindowRect);
+        saveMode();
         return this.modes.get(currentModeIndex).getFor(ctx);
     }
 
@@ -113,13 +124,11 @@ class ModImpl implements Mod {
 
     @Override
     public void onStopping() {
-        try {
-            this.config.put(MODE_PROP, this.modes.get(this.currentModeIndex).getName());
-            try (final FileWriter fw = new FileWriter(this.configPath.toFile())) {
-                this.config.store(fw, null);
-            }
-        } catch (Exception e) {
-            syslog().error(e);
-        }
+        saveMode();
+    }
+
+    public void saveMode() {
+        ConfigHandler.get().mode = this.modes.get(this.currentModeIndex).getName();
+        ConfigHandler.save();
     }
 }

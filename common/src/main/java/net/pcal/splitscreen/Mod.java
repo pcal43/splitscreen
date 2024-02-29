@@ -56,6 +56,8 @@ public interface Mod {
 
     WindowDescription onResolutionChange(MinecraftWindowContext res);
 
+    void onUpdateConfig();
+
     void onInitialize(Path configDirectory);
 
     void onStopping();
