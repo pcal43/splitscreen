@@ -11,6 +11,9 @@ build/
 out/
 classes/
 
+/common/bin/
+/fabric/bin/
+
 # eclipse
 
 *.launch
