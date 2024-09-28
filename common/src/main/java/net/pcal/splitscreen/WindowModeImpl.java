@@ -54,9 +54,8 @@ record WindowModeImpl(
         return new WindowDescription(style, xFn.apply(res), yFn.apply(res), widthFn.apply(res), heightFn.apply(res));
     }
 
-    static List<WindowMode> getModes() {
+    static List<WindowMode> getModes(int gap) {
         final List<WindowMode> modes = new ArrayList<>();
-        final int gap = 2; // TODO make this configurable
         addMode(modes, "WINDOWED", WINDOWED, r -> r.windowRect().x(), r -> r.windowRect().y(),
                 r -> r.windowRect().width(), r -> r.windowRect().height());
         addMode(modes, "LEFT", SPLITSCREEN, r -> 0, r -> 0, r -> r.screenWidth() / 2 - gap, r -> r.screenHeight());

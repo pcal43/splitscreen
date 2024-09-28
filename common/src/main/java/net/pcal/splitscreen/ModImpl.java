@@ -24,11 +24,6 @@
 
 package net.pcal.splitscreen;
 
-import net.pcal.splitscreen.WindowMode.MinecraftWindowContext;
-import net.pcal.splitscreen.WindowMode.Rectangle;
-import net.pcal.splitscreen.WindowMode.WindowDescription;
-import net.pcal.splitscreen.WindowMode.WindowStyle;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,6 +31,10 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Properties;
 
+import net.pcal.splitscreen.WindowMode.MinecraftWindowContext;
+import net.pcal.splitscreen.WindowMode.Rectangle;
+import net.pcal.splitscreen.WindowMode.WindowDescription;
+import net.pcal.splitscreen.WindowMode.WindowStyle;
 import static net.pcal.splitscreen.logging.SystemLogger.syslog;
 
 /**
@@ -48,8 +47,10 @@ class ModImpl implements Mod {
     // Fields
 
     private static final String MODE_PROP = "mode";
+    private static final String GAP_PROP = "gap";
 
-    private final List<WindowMode> modes;
+    private List<WindowMode> modes;
+    private int gap = 2;
     private Properties config;
     private Path configPath;
 
@@ -57,7 +58,6 @@ class ModImpl implements Mod {
     private Rectangle savedWindowRect;
 
     ModImpl() {
-        this.modes = WindowModeImpl.getModes();
     }
 
     // ======================================================================
@@ -75,6 +75,11 @@ class ModImpl implements Mod {
             }
         }
         try {
+            String gapProp = config.getProperty(GAP_PROP);
+            if (gapProp != null) {
+                this.gap = Integer.parseInt(gapProp);
+            }
+            this.modes = WindowModeImpl.getModes(gap);
             String modeConfig = config.getProperty(MODE_PROP);
             if (modeConfig != null) {
                 modeConfig = modeConfig.trim();
@@ -89,7 +94,7 @@ class ModImpl implements Mod {
         } catch (Exception e) {
             syslog().error(e);
         }
-    }
+        }
 
     @Override
     public WindowDescription onWindowCreate(final MinecraftWindowContext res) {
@@ -115,6 +120,7 @@ class ModImpl implements Mod {
     public void onStopping() {
         try {
             this.config.put(MODE_PROP, this.modes.get(this.currentModeIndex).getName());
+            this.config.put(GAP_PROP, String.valueOf(String.valueOf(this.gap)));
             try (final FileWriter fw = new FileWriter(this.configPath.toFile())) {
                 this.config.store(fw, null);
             }
