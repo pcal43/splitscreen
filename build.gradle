@@ -1,35 +1,162 @@
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
+    id 'fabric-loom' version '1.8.9'
+    id 'maven-publish'
+    id "com.modrinth.minotaur" version "2.+"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
-architectury {
-    minecraft = project.minecraft_version
+apply plugin: 'com.matthewprenger.cursegradle'
+
+
+sourceCompatibility = JavaVersion.VERSION_21
+targetCompatibility = JavaVersion.VERSION_21
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+    // Add repositories to retrieve artifacts from in here.
+    // You should only use this when depending on other mods because
+    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+    // for more information about repositories.
+    maven { url 'https://maven.nucleoid.xyz' }
 }
 
-subprojects {
-    apply plugin: "java-library"
 
-    java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-    compileJava.options.encoding = compileTestJava.options.encoding = javadoc.options.encoding = "UTF-8"
+configurations {
+    // configuration that holds jars to include in the jar
+    extraLibs
+}
 
-    repositories {
-        mavenCentral()
-        maven { url 'https://maven.fabricmc.net/' }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+dependencies {
+    // Fabric & Minecraft
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // JUnit
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.8.2"
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
     }
+}
 
-    java {
-        withSourcesJar()
+sourceSets.test {
+    resources.srcDirs = ["src/test/resources"]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+
+java {
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
+}
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
-configure(subprojects) {
-    apply plugin: "architectury-plugin"
-    apply plugin: "dev.architectury.loom"
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
+//	from {
+//		configurations.include.collect { it.isDirectory() ? it : zipTree(it) }
+    //}
+}
 
+
+
+// https://github.com/modrinth/minotaur
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "${project.modrinth_projectId}"
+    versionNumber = project.mod_version
+    versionType = "release"
+    uploadFile = remapJar
+    changelog = "<p><a href='https://github.com/pcal43/${project.github_projectId}/releases/tag/${project.mod_version}'>https://github.com/pcal43/${project.github_projectId}/releases/tag/${project.mod_version}</a></p>"
+    gameVersions = ["${project.minecraft_version}"]
+    loaders = ["fabric"]
     dependencies {
-        minecraft "com.mojang:minecraft:${project.minecraft_version}"
-        mappings loom.officialMojangMappings()
+        required.project "fabric-api"
     }
 }
+
+
+curseforge {
+    apiKey = System.getenv("CURSEFORGE_TOKEN") ?: 'CURSEFORGE_TOKEN NOT_SET'
+
+    project {
+        id = "${project.curseforge_projectId}"
+        releaseType = "release"
+        changelog = "https://github.com/pcal43/${project.github_projectId}/releases/tag/${project.mod_version}"
+        changelogType = "markdown"
+        mod_version = project.mod_version
+        addGameVersion ((String) project.minecraft_version)
+        addGameVersion "Fabric"
+        mainArtifact(remapJar)
+
+        afterEvaluate {
+            uploadTask.dependsOn("remapJar")
+        }
+    }
+
+    options {
+        forgeGradleIntegration = false
+    }
+}
+
+/**
+ NOTE TO SELF
+
+
+ Thanks very much to naari3 for exaplaining this:
+ https://discord.com/channels/507304429255393322/842691768175951942/1237576944174895196
+
+ i googled this and find this issue, i changed  java.gradle.buildServer.enabled to off,
+ The project is loaded for the time being, but I have a feeling another problem will arise.
+ https://github.com/redhat-developer/vscode-java/issues/3423
+ So, it looked like a gradle or vscode problem, not a problem around fabric. Thank you kindly for your time!
+
+ Just wanted to share something for those who've bumped into similar issues
+ as I did using VSCode, like the messages Source.java is a non-project file,
+ only syntax errors are reported and ConfigError: The project 'project-name'
+ is not a valid Java project. Please note that I am not an expert Java
+ programmer, so there could be errors in my explanation.
+
+ As you might know, from Minecraft 1.20.5 onwards, the required Java runtime
+ has moved to Java 21. Depending on your setup, VSCode might stop loading
+ your projects with this new version. Apart from setting the JAVA_HOME
+ environment variable, you also need to specify the JDK home that the Gradle
+ daemon uses in the VSCode extensions like this:
+
+ "java.import.gradle.java.home": "C:\\Program Files\\Java\\jdk-21",
+
+ By default, the vscode-java extension uses JDK 17 bundled with the extension
+ to launch the Gradle daemon. However, using this setup to deobfuscate version
+ 1.20.6 with the Gradle plugin fabric-loom results in errors. This issue is due
+ to the runtime's major version compatibility, but the extension communicates
+ this error in a very unclear way to users, making it seem like the project
+ suddenly won't load without any errors.
+
+ */
