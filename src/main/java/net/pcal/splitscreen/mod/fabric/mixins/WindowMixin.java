@@ -98,9 +98,6 @@ public abstract class WindowMixin {
     // ======================================================================
     // Mixins
 
-    //@Shadow
-    public abstract void updateDisplay();
-
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     private void Window(WindowEventHandler eventHandler, ScreenManager monitorTracker, DisplayData settings, String videoMode, String title, CallbackInfo ci) {
         // ok so the issue seems to be that this triggers a framebuffersizechanged when it normally wouldn't
