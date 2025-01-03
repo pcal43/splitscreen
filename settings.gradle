@@ -1,29 +1,10 @@
 pluginManagement {
     repositories {
         maven {
-            name = "Fabric"
-            url = "https://maven.fabricmc.net/"
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
         }
-        maven {
-            name = "Forge"
-            url = "https://maven.minecraftforge.net/"
-        }
-        maven {
-            name = "Architectury"
-            url = "https://maven.architectury.dev/"
-        }
-        //mavenCentral()
+        mavenCentral()
         gradlePluginPortal()
-        maven {
-            name = 'NeoForged'
-            url = 'https://maven.neoforged.net/releases'
-        }
-
     }
 }
-
-rootProject.name = "splitscreen"
-
-include(":common")
-include(":fabric")
-//include(":forge")
