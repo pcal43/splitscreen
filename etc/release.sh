@@ -49,7 +49,7 @@ fi
 # Build release
 #
 
-BUILD_LIBS_DIR='fabric/build/libs'
+BUILD_LIBS_DIR='build/libs'
 
 CURRENT_VERSION=$(sed -rn 's/^mod_version.*=[ ]*([^\n]+)$/\1/p' gradle.properties)
 echo "Current version is '$CURRENT_VERSION'"
