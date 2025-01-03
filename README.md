@@ -38,6 +38,11 @@ for splitscreen.
 ## Other mod features
 * Username is displayed in the upper-left corner of the main menu (so you can tell who's who)
 
+## Adjusting the gap between windows
+By default, the mod puts a small gap between windows.  You can change the width of this gap
+(or make it `0`) by setting the value of the `gap` property in `config/splitscreen.properties`.
+(This file doesn't exist until you quit minecraft for the first time with the mod running).
+
 ## Acknowledgements
 * Video courtesy of [wormstweaker](https://www.youtube.com/@WORMSTweaker)
 * Icon based on [Squares icons created by Rahul Kaklotar - Flaticon](https://www.flaticon.com/free-icons/squares)
