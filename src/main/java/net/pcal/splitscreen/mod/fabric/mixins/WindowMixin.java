@@ -98,7 +98,7 @@ public abstract class WindowMixin {
     // ======================================================================
     // Mixins
 
-    @Shadow
+    //@Shadow
     public abstract void updateDisplay();
 
     @Inject(method = "<init>", at = @At(value = "TAIL"))
