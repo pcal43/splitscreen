@@ -50,7 +50,7 @@ class ModImpl implements Mod {
     private static final String GAP_PROP = "gap";
 
     private List<WindowMode> modes;
-    private int gap = 2;
+    private int gap = 1;
     private Properties config;
     private Path configPath;
 
