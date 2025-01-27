@@ -30,8 +30,8 @@ for splitscreen.
 * In each instance, install SplitScreen Support and MidnightControls
 * Launch the instances and configure _each_ of them as follows:
   * **SplitScreen Support**: Press `F11` to position the windows
-  * **MidnightControls**: Be sure `Unfocused Input` is enabled
-  * **Minecraft**: Press `F3+P` to disable _Pause on Lost Focus_
+  * **MidnightControls**: Enable `Unfocused Input` and `Virtual Mouse` as [described here](https://www.midnightdust.eu/wiki/midnightcontrols/)
+  * **Minecraft**: Press `F3+P` to disable [_Pause on Lost Focus_](https://minecraft.wiki/w/Debug_hotkey)
 * Get a gamepad for each instance and configure MidnightControls
 * In one of the instances, create a new world and 'Open to LAN'
 * Connect the other instances to that one (e.g., localhost:25565)
