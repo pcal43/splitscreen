@@ -9,6 +9,9 @@ restart the game.
 This makes it easier for you to start two or more copies of Minecraft and have the windows be positioned automatically 
 for splitscreen.
 
+This mod is designed to be used in conjunction with a Minecraft launcher (such as [PrismLauncher](https://prismlauncher.org/)) and
+a gamepad mod (such [Midnight Controls](https://modrinth.com/mod/midnightcontrols))
+
 ## Usage Video
 
 [![Video](https://github.com/pcal43/splitscreen/blob/pcal/readme-updates/etc/movie-thumb.png?raw=true)](https://youtu.be/QtsTT2dEED0)
@@ -16,7 +19,7 @@ for splitscreen.
 ## Suggested Setup 
 
 ### Stuff you need
-* Two or more copies of minecraft
+* Two or more legal minecraft accounts
 * [PrismLauncher](https://prismlauncher.org/)
 * [Midnight Controls](https://modrinth.com/mod/midnightcontrols)
 * [Splitscreen Support](https://modrinth.com/mod/splitscreen)
