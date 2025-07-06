@@ -41,4 +41,7 @@ classes/
 run/
 logs/
 
+# environment files with secrets
+.env
+
 .architectury-transformer/

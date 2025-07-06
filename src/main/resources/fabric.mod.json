@@ -5,11 +5,12 @@
   "name": "Splitscreen Support",
   "description": "Easier Window Positioning for Local Multiplayer",
   "authors": [
-    "pcal.net"
+    "FlyingEwok (updated fork)",
+    "pcal.net (original)"
   ],
   "contact": {
-    "homepage": "https://github.com/pcal43/splitscreen",
-    "sources": "https://github.com/pcal43/splitscreen"
+    "homepage": "https://github.com/FlyingEwok/splitscreen",
+    "sources": "https://github.com/FlyingEwok/splitscreen"
   },
   "license": "MIT",
   "environment": "*",

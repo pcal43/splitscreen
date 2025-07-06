@@ -1,4 +1,8 @@
-# Splitscreen Support
+# Splitscreen Support - Updated & Maintained Fork
+
+> **🔧 This is an actively maintained fork of the original [Splitscreen Support](https://modrinth.com/mod/splitscreen) mod by pcal.net**
+> 
+> **✅ Updated for Minecraft 1.21.7+** | **✅ Active maintenance** | **✅ Community-driven improvements**
 
 Simple mod that makes it easier to position windows for local multiplayer.
 
@@ -22,7 +26,7 @@ a gamepad mod (such [Midnight Controls](https://modrinth.com/mod/midnightcontrol
 * Two or more legal minecraft accounts
 * [PrismLauncher](https://prismlauncher.org/)
 * [Midnight Controls](https://modrinth.com/mod/midnightcontrols)
-* [Splitscreen Support](https://modrinth.com/mod/splitscreen)
+* [Splitscreen Support (This Fork)](https://modrinth.com/mod/tPDTaOq8)
 * Two or more gamepads
 * One or more friends
 * One big TV hooked up to your computer
@@ -48,16 +52,47 @@ By default, the mod puts a small gap between windows.  You can change the width 
 (or make it `0`) by setting the value of the `gap` property in `config/splitscreen.properties`.
 (This file doesn't exist until you quit minecraft for the first time with the mod running).
 
+## Why This Fork?
+
+This fork exists because the original mod wasn't accepting pull requests for newer Minecraft versions. Key differences:
+
+- **🎯 Updated for Minecraft 1.21.7+** (and future versions as they release)
+- **🔧 Active maintenance** - Issues get addressed, PRs get reviewed
+- **🚀 Faster updates** for new Minecraft versions
+- **🤝 Community-driven** - Welcoming contributions and feedback
+- **📋 Same great features** - All original functionality preserved
+
+## Requirements
+
+- **Minecraft**: 1.21.7+ 
+- **Mod Loader**: Fabric
+- **Dependencies**: Fabric API
+
 ## Acknowledgements
+* **Original mod** by [pcal.net](https://github.com/pcal43/splitscreen) - All credit for the core concept and initial implementation
+* **This fork** maintained by nicholas with community contributions
 * Video courtesy of [wormstweaker](https://www.youtube.com/@WORMSTweaker)
 * Icon based on [Squares icons created by Rahul Kaklotar - Flaticon](https://www.flaticon.com/free-icons/squares)
 
-## Questions?
+## Questions & Support
 
-If you have questions about this mod, please join the Discord server:
+For this fork:
+- **Issues & Bug Reports**: [GitHub Issues](https://github.com/FlyingEwok/splitscreen/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/FlyingEwok/splitscreen/discussions)
+- **Pull Requests**: Always welcome!
 
-[https://discord.pcal.net](https://discord.pcal.net)
+For the original mod questions, see: [https://discord.pcal.net](https://discord.pcal.net)
 
-Comments have been disabled and I will **not** reply to private messages on Curseforge.
+## Contributing
+
+This fork welcomes contributions! Whether you're fixing bugs, adding features, or updating for new Minecraft versions:
+
+1. Fork this repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+See `README-FORK.md` for detailed instructions on setting up your own fork for publishing.
 
 ![System](https://github.com/pcal43/splitscreen/blob/main/etc/screenshot-0.png?raw=true)
