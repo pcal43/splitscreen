@@ -62,7 +62,7 @@ public abstract class WindowMixin {
 
     @Final
     @Shadow
-    private long window;
+    private long handle;
     @Shadow
     private int windowedX;
     @Shadow
@@ -117,8 +117,8 @@ public abstract class WindowMixin {
     }
 
     @Inject(method = "onFramebufferResize(JII)V", at = @At("HEAD"))
-    private void onFramebufferSizeChanged(long window, int width, int height, CallbackInfo ci) {
-        if (window == this.window) {
+    private void onFramebufferSizeChanged(long handle, int width, int height, CallbackInfo ci) {
+        if (handle == this.handle) {
             final WindowDescription wd = mod().onResolutionChange(splitscreen_getWindowContext());
             if (wd.style() == WindowStyle.SPLITSCREEN) {
                 splitscreen_repositionWindow(wd);
@@ -165,8 +165,8 @@ public abstract class WindowMixin {
                 this.y = this.windowedY;
                 this.width = this.windowedWidth;
                 this.height = this.windowedHeight;
-                GLFW.glfwSetWindowMonitor(this.window, 0L, this.x, this.y, this.width, this.height, -1);
-                GLFW.glfwSetWindowAttrib(this.window, GLFW_DECORATED, wd.style() == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
+                GLFW.glfwSetWindowMonitor(this.handle, 0L, this.x, this.y, this.width, this.height, -1);
+                GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, wd.style() == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
         }
     }
 }
