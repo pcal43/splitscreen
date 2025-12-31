@@ -84,7 +84,6 @@ public abstract class WindowMixin {
     @Shadow
     private Optional<VideoMode> preferredFullscreenVideoMode;
 
-
     @Shadow
     public abstract boolean isFullscreen();
 
@@ -103,7 +102,7 @@ public abstract class WindowMixin {
         // ok so the issue seems to be that this triggers a framebuffersizechanged when it normally wouldn't
         // minecraftclient is listening for it on resolutionChanged and it isn't ready.  so we probably just need to find
         // a later time to move the window.
-        //splitscreen_repositionWindow(mod().onWindowCreate(splitscreen_getWindowContext()));
+        // splitscreen_repositionWindow(mod().onWindowCreate(splitscreen_getWindowContext()));
     }
 
     @Inject(method = "toggleFullScreen()V", at = @At("HEAD"), cancellable = true)
@@ -143,9 +142,9 @@ public abstract class WindowMixin {
             syslog().warn("could not determine monitor");
             return null;
         }
-        final VideoMode videoMode = findBestMonitor().getPreferredVidMode(this.preferredFullscreenVideoMode);
+        final VideoMode videoMode = monitor.getPreferredVidMode(this.preferredFullscreenVideoMode);
         final Rectangle currentWindow = new Rectangle(x, y, width, height);
-        return new MinecraftWindowContext(videoMode.getWidth(), videoMode.getHeight(), currentWindow);
+        return new MinecraftWindowContext(videoMode.getWidth(), videoMode.getHeight(), currentWindow, monitor.getX(), monitor.getY());
     }
 
     @Unique

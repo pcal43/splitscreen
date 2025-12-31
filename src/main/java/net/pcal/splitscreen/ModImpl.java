@@ -107,7 +107,7 @@ class ModImpl implements Mod {
             this.savedWindowRect = mcContext.windowRect();
         }
         currentModeIndex = (currentModeIndex + 1) % modes.size();
-        final MinecraftWindowContext ctx = new MinecraftWindowContext(mcContext.screenWidth(), mcContext.screenHeight(), this.savedWindowRect);
+        final MinecraftWindowContext ctx = new MinecraftWindowContext(mcContext.screenWidth(), mcContext.screenHeight(), this.savedWindowRect, mcContext.monitorX(), mcContext.monitorY());
         return this.modes.get(currentModeIndex).getFor(ctx);
     }
 
