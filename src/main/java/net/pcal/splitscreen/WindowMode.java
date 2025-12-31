@@ -53,7 +53,7 @@ public interface WindowMode {
     /**
      * Lets Minecraft describe to us the current window and its context.
      */
-    record MinecraftWindowContext(int screenWidth, int screenHeight, Rectangle windowRect) {
+    record MinecraftWindowContext(int screenWidth, int screenHeight, Rectangle windowRect, int monitorX, int monitorY) {
     }
 
 

@@ -58,17 +58,17 @@ record WindowModeImpl(
         final List<WindowMode> modes = new ArrayList<>();
         addMode(modes, "WINDOWED", WINDOWED, r -> r.windowRect().x(), r -> r.windowRect().y(),
                 r -> r.windowRect().width(), r -> r.windowRect().height());
-        addMode(modes, "LEFT", SPLITSCREEN, r -> 0, r -> 0, r -> r.screenWidth() / 2 - gap, r -> r.screenHeight());
-        addMode(modes, "RIGHT", SPLITSCREEN, r -> r.screenWidth() / 2 + gap, r -> 0, r -> r.screenWidth() / 2 - gap, r -> r.screenHeight());
-        addMode(modes, "TOP", SPLITSCREEN, r -> 0, r -> 0, r -> r.screenWidth(), r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "BOTTOM", SPLITSCREEN, r -> 0, r -> r.screenHeight() / 2 + gap, r -> r.screenWidth(), r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "TOP_LEFT", SPLITSCREEN, r -> 0, r -> 0,
+        addMode(modes, "LEFT", SPLITSCREEN, r -> r.monitorX(), r -> r.monitorY(), r -> r.screenWidth() / 2 - gap, r -> r.screenHeight());
+        addMode(modes, "RIGHT", SPLITSCREEN, r -> r.monitorX() + r.screenWidth() / 2 + gap, r -> r.monitorY(), r -> r.screenWidth() / 2 - gap, r -> r.screenHeight());
+        addMode(modes, "TOP", SPLITSCREEN, r -> r.monitorX(), r -> r.monitorY(), r -> r.screenWidth(), r -> r.screenHeight() / 2 - gap);
+        addMode(modes, "BOTTOM", SPLITSCREEN, r -> r.monitorX(), r -> r.monitorY() + r.screenHeight() / 2 + gap, r -> r.screenWidth(), r -> r.screenHeight() / 2 - gap);
+        addMode(modes, "TOP_LEFT", SPLITSCREEN, r -> r.monitorX(), r -> r.monitorY(),
                 r -> r.screenWidth() / 2 - gap, r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "TOP_RIGHT", SPLITSCREEN, r -> r.screenWidth() / 2 + gap, r -> 0,
+        addMode(modes, "TOP_RIGHT", SPLITSCREEN, r -> r.monitorX() + r.screenWidth() / 2 + gap, r -> r.monitorY(),
                 r -> r.screenWidth() / 2 - gap, r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "BOTTOM_LEFT", SPLITSCREEN, r -> 0, r -> r.screenHeight() / 2 + gap,
+        addMode(modes, "BOTTOM_LEFT", SPLITSCREEN, r -> r.monitorX(), r -> r.monitorY() + r.screenHeight() / 2 + gap,
                 r -> r.screenWidth() / 2 - gap, r -> r.screenHeight() / 2 - gap);
-        addMode(modes, "BOTTOM_RIGHT", SPLITSCREEN, r -> r.screenWidth() / 2 + gap, r -> r.screenHeight() / 2 + gap,
+        addMode(modes, "BOTTOM_RIGHT", SPLITSCREEN, r -> r.monitorX() + r.screenWidth() / 2 + gap, r -> r.monitorY() + r.screenHeight() / 2 + gap,
                 r -> r.screenWidth() / 2 - gap, r -> r.screenHeight() / 2 - gap);
         addMode(modes, "FULLSCREEN", FULLSCREEN, no(), no(), no(), no());
         return modes;
