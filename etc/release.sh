@@ -89,7 +89,7 @@ set +x
 #
 # Publish to curseforge
 #
-./gradlew curseforge
+./gradlew publishCurseForge
 
 
 #
