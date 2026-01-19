@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.pcal.splitscreen.mod.fabric.mixins",
+  "refmap": "splitscreen-refmap.json",
   "compatibilityLevel": "JAVA_16",
   "client": [
     "TitleScreenMixin",
