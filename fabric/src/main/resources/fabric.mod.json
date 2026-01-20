@@ -12,6 +12,7 @@
     "sources": "https://github.com/pcal43/splitscreen"
   },
   "license": "MIT",
+  "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [

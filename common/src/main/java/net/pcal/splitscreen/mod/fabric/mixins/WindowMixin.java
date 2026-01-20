@@ -98,7 +98,7 @@ public abstract class WindowMixin {
     // ======================================================================
     // Mixins
 
-    @Inject(method = "<init>", at = @At(value = "TAIL"))
+    @Inject(method = "<init>", at = @At(value = "TAIL"), remap = false)
     private void Window(WindowEventHandler eventHandler, ScreenManager monitorTracker, DisplayData settings, String videoMode, String title, CallbackInfo ci) {
         // ok so the issue seems to be that this triggers a framebuffersizechanged when it normally wouldn't
         // minecraftclient is listening for it on resolutionChanged and it isn't ready.  so we probably just need to find
@@ -106,7 +106,7 @@ public abstract class WindowMixin {
         //splitscreen_repositionWindow(mod().onWindowCreate(splitscreen_getWindowContext()));
     }
 
-    @Inject(method = "toggleFullScreen()V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "toggleFullScreen()V", at = @At("HEAD"), cancellable = true, remap = false)
     public void splitscreen_toggleFullScreen(CallbackInfo ci) {
         final MinecraftWindowContext res = splitscreen_getWindowContext();
         if (res != null) {
@@ -116,7 +116,7 @@ public abstract class WindowMixin {
         ci.cancel();
     }
 
-    @Inject(method = "onFramebufferResize(JII)V", at = @At("HEAD"))
+    @Inject(method = "onFramebufferResize(JII)V", at = @At("HEAD"), remap = false)
     private void onFramebufferSizeChanged(long handle, int width, int height, CallbackInfo ci) {
         if (handle == this.handle) {
             final WindowDescription wd = mod().onResolutionChange(splitscreen_getWindowContext());
@@ -127,7 +127,7 @@ public abstract class WindowMixin {
         }
     }
 
-    @Inject(method = "setMode()V", at = @At("HEAD"))
+    @Inject(method = "setMode()V", at = @At("HEAD"), remap = false)
     private void splitscreen_updateWindowRegion(CallbackInfo ci) {
         final WindowDescription wd = mod().onWindowCreate(splitscreen_getWindowContext());
         splitscreen_repositionWindow(wd);

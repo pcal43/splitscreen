@@ -46,7 +46,7 @@ public class TitleScreenMixin extends Screen {
         super(text);
     }
 
-    @Inject(method = "init", at = @At("RETURN"))
+    @Inject(method = "init", at = @At("RETURN"), remap = false)
     private void addText(CallbackInfo ci) {
         final Component text = Component.literal(Minecraft.getInstance().getUser().getName());
         addRenderableWidget(new StringWidget(4, 4, font.width(text), 10, text, this.font));

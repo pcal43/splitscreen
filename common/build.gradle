@@ -27,11 +27,6 @@ loom {
     runs {
         // No run configurations needed for common module
     }
-
-    // Configure mixin refmap
-    mixin {
-        defaultRefmapName = "splitscreen-common-refmap.json"
-    }
 }
 
 tasks.withType(JavaCompile).configureEach {
