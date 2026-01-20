@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package net.pcal.splitscreen.mod.fabric.mixins;
+package net.pcal.splitscreen.mixins;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.StringWidget;
