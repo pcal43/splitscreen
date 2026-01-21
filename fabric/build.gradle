@@ -80,10 +80,6 @@ loom {
         }
     }
 
-    mixin {
-        defaultRefmapName = "splitscreen-refmap.json"
-    }
-
     // Common sources are now part of main sourceSet
     mods {
         "splitscreen" {

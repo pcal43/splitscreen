@@ -2,8 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.pcal.splitscreen.mixins",
-  "refmap": "splitscreen-refmap.json",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_21",
   "client": [
     "TitleScreenMixin",
     "WindowMixin"

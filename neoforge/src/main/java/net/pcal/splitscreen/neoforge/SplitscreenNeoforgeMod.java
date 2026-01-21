@@ -1,7 +1,9 @@
 package net.pcal.splitscreen.neoforge;
 
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.GameShuttingDownEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +23,17 @@ public class SplitscreenNeoforgeMod {
         // will break our mixins if the config isn't set up.  It seems
         // fairly safe to do it here.
         mod().onInitialize(CONFIG_DIR_PATH);
+        modBus.addListener(SplitscreenNeoforgeMod::onClientStopping);
         LOGGER.info("[Splitscreen] Mod initialized");
+    }
+
+    @SubscribeEvent
+    private static void onClientStopping(final GameShuttingDownEvent event) {
+        try {
+            mod().onStopping();
+        } catch (Throwable t) {
+            LOGGER.error("[Splitscreen] Error during shutdown", t);
+        }
     }
 }
 
