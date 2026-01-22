@@ -24,4 +24,3 @@ public class SplitscreenNeoforgeMod {
         LOGGER.info("[Splitscreen] Mod initialized");
     }
 }
-
