@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package net.pcal.splitscreen;
+package net.pcal.splitscreen.common;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -31,11 +31,11 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Properties;
 
-import net.pcal.splitscreen.WindowMode.MinecraftWindowContext;
-import net.pcal.splitscreen.WindowMode.Rectangle;
-import net.pcal.splitscreen.WindowMode.WindowDescription;
-import net.pcal.splitscreen.WindowMode.WindowStyle;
-import static net.pcal.splitscreen.logging.SystemLogger.syslog;
+import net.pcal.splitscreen.common.WindowMode.MinecraftWindowContext;
+import net.pcal.splitscreen.common.WindowMode.Rectangle;
+import net.pcal.splitscreen.common.WindowMode.WindowDescription;
+import net.pcal.splitscreen.common.WindowMode.WindowStyle;
+import static net.pcal.splitscreen.common.logging.SystemLogger.syslog;
 
 /**
  * @author pcal
@@ -107,6 +107,7 @@ class ModImpl implements Mod {
             this.savedWindowRect = mcContext.windowRect();
         }
         currentModeIndex = (currentModeIndex + 1) % modes.size();
+        saveConfig();
         final MinecraftWindowContext ctx = new MinecraftWindowContext(mcContext.screenWidth(), mcContext.screenHeight(), this.savedWindowRect);
         return this.modes.get(currentModeIndex).getFor(ctx);
     }
@@ -116,11 +117,10 @@ class ModImpl implements Mod {
         return this.modes.get(this.currentModeIndex).getFor(res);
     }
 
-    @Override
-    public void onStopping() {
+    private synchronized void saveConfig() {
         try {
             this.config.put(MODE_PROP, this.modes.get(this.currentModeIndex).getName());
-            this.config.put(GAP_PROP, String.valueOf(String.valueOf(this.gap)));
+            this.config.put(GAP_PROP, String.valueOf(this.gap));
             try (final FileWriter fw = new FileWriter(this.configPath.toFile())) {
                 this.config.store(fw, null);
             }

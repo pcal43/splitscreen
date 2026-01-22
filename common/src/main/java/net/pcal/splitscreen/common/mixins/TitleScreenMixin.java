@@ -22,45 +22,33 @@
  * THE SOFTWARE.
  */
 
-package net.pcal.splitscreen;
+package net.pcal.splitscreen.common.mixins;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.network.chat.Component;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * A named, user-selectable rule for sizing and positioning the main minecraft window.  It can describe what the
- * window shape ought to be given a screen resolution.
+ * Display the username in the upper left corner so you can tell whose screen is whose.
  *
  * @author pcal
- * @since 0.0.1
+ * @since 0.0.2
  */
-public interface WindowMode {
-
-    String getName();
-
-    /**
-     * Describes to Minecraft what we want the window to look like in the given context.
-     */
-    WindowDescription getFor(MinecraftWindowContext resolution);
-
-    enum WindowStyle {
-        FULLSCREEN, WINDOWED, SPLITSCREEN
+@Mixin(TitleScreen.class)
+public class TitleScreenMixin extends Screen {
+    protected TitleScreenMixin(Component text) {
+        super(text);
     }
 
-    /**
-     * Describes to Minecraft what we want the window to look like.
-     */
-    record WindowDescription(WindowStyle style, int x, int y, int width, int height) {
+    @Inject(method = "init", at = @At("RETURN"), remap = false)
+    private void addText(CallbackInfo ci) {
+        final Component text = Component.literal(Minecraft.getInstance().getUser().getName());
+        addRenderableWidget(new StringWidget(4, 4, font.width(text), 10, text, this.font));
     }
-
-    /**
-     * Lets Minecraft describe to us the current window and its context.
-     */
-    record MinecraftWindowContext(int screenWidth, int screenHeight, Rectangle windowRect) {
-    }
-
-
-    record WindowContext(MinecraftWindowContext mcContext, Rectangle savedWindowSize) {
-    }
-
-    record Rectangle(int x, int y, int width, int height) {
-    }
-
 }

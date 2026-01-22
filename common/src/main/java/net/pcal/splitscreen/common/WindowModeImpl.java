@@ -22,15 +22,15 @@
  * THE SOFTWARE.
  */
 
-package net.pcal.splitscreen;
+package net.pcal.splitscreen.common;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static net.pcal.splitscreen.WindowMode.WindowStyle.FULLSCREEN;
-import static net.pcal.splitscreen.WindowMode.WindowStyle.SPLITSCREEN;
-import static net.pcal.splitscreen.WindowMode.WindowStyle.WINDOWED;
+import static net.pcal.splitscreen.common.WindowMode.WindowStyle.FULLSCREEN;
+import static net.pcal.splitscreen.common.WindowMode.WindowStyle.SPLITSCREEN;
+import static net.pcal.splitscreen.common.WindowMode.WindowStyle.WINDOWED;
 
 /**
  * @author pcal

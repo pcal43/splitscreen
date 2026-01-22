@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package net.pcal.splitscreen.mixins;
+package net.pcal.splitscreen.common.mixins;
 
-import net.pcal.splitscreen.WindowMode.MinecraftWindowContext;
-import net.pcal.splitscreen.WindowMode.Rectangle;
-import net.pcal.splitscreen.WindowMode.WindowDescription;
-import net.pcal.splitscreen.WindowMode.WindowStyle;
+import net.pcal.splitscreen.common.WindowMode.MinecraftWindowContext;
+import net.pcal.splitscreen.common.WindowMode.Rectangle;
+import net.pcal.splitscreen.common.WindowMode.WindowDescription;
+import net.pcal.splitscreen.common.WindowMode.WindowStyle;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
@@ -40,8 +40,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 
-import static net.pcal.splitscreen.Mod.mod;
-import static net.pcal.splitscreen.logging.SystemLogger.syslog;
+import static net.pcal.splitscreen.common.Mod.mod;
+import static net.pcal.splitscreen.common.logging.SystemLogger.syslog;
 import static org.lwjgl.glfw.GLFW.GLFW_DECORATED;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;

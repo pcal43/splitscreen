@@ -22,35 +22,40 @@
  * THE SOFTWARE.
  */
 
-package net.pcal.splitscreen.mod.fabric;
+package net.pcal.splitscreen.common;
 
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.fabricmc.loader.api.FabricLoader;
-import net.pcal.splitscreen.logging.SystemLogger;
-import org.slf4j.LoggerFactory;
+import net.pcal.splitscreen.common.WindowMode.MinecraftWindowContext;
+import net.pcal.splitscreen.common.WindowMode.WindowDescription;
 
-import static net.pcal.splitscreen.Mod.mod;
-
+import java.nio.file.Path;
 
 /**
- * Initializer that runs in a client.
+ * Singleton that houses the core mod logic.
  *
  * @author pcal
  * @since 0.0.1
  */
-public class FabricClientInitializer implements ClientModInitializer {
+public interface Mod {
 
-    private static final String MOD_ID = "splitscreen";
-
-    @Override
-    public void onInitializeClient() {
-        SystemLogger.Singleton.register(LoggerFactory.getLogger(MOD_ID));
-        mod().onInitialize(FabricLoader.getInstance().getConfigDir());
-        ClientLifecycleEvents.CLIENT_STOPPING.register(
-                minecraftClient -> {
-                    mod().onStopping();
-                }
-        );
+    class Singleton {
+        private static Mod INSTANCE = null;
     }
+
+    static Mod mod() {
+        synchronized (Mod.class) {
+            if (Singleton.INSTANCE == null) {
+                Singleton.INSTANCE = new ModImpl();
+            }
+        }
+        return Singleton.INSTANCE;
+    }
+
+    WindowDescription onWindowCreate(MinecraftWindowContext res);
+
+    WindowDescription onToggleFullscreen(MinecraftWindowContext res);
+
+    WindowDescription onResolutionChange(MinecraftWindowContext res);
+
+    void onInitialize(Path configDirectory);
+
 }

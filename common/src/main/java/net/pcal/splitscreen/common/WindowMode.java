@@ -22,42 +22,45 @@
  * THE SOFTWARE.
  */
 
-package net.pcal.splitscreen;
-
-import net.pcal.splitscreen.WindowMode.MinecraftWindowContext;
-import net.pcal.splitscreen.WindowMode.WindowDescription;
-
-import java.nio.file.Path;
+package net.pcal.splitscreen.common;
 
 /**
- * Singleton that houses the core mod logic.
+ * A named, user-selectable rule for sizing and positioning the main minecraft window.  It can describe what the
+ * window shape ought to be given a screen resolution.
  *
  * @author pcal
  * @since 0.0.1
  */
-public interface Mod {
+public interface WindowMode {
 
-    class Singleton {
-        private static Mod INSTANCE = null;
+    String getName();
+
+    /**
+     * Describes to Minecraft what we want the window to look like in the given context.
+     */
+    WindowDescription getFor(MinecraftWindowContext resolution);
+
+    enum WindowStyle {
+        FULLSCREEN, WINDOWED, SPLITSCREEN
     }
 
-    static Mod mod() {
-        synchronized (Mod.class) {
-            if (Singleton.INSTANCE == null) {
-                Singleton.INSTANCE = new ModImpl();
-            }
-        }
-        return Singleton.INSTANCE;
+    /**
+     * Describes to Minecraft what we want the window to look like.
+     */
+    record WindowDescription(WindowStyle style, int x, int y, int width, int height) {
     }
 
-    WindowDescription onWindowCreate(MinecraftWindowContext res);
+    /**
+     * Lets Minecraft describe to us the current window and its context.
+     */
+    record MinecraftWindowContext(int screenWidth, int screenHeight, Rectangle windowRect) {
+    }
 
-    WindowDescription onToggleFullscreen(MinecraftWindowContext res);
 
-    WindowDescription onResolutionChange(MinecraftWindowContext res);
+    record WindowContext(MinecraftWindowContext mcContext, Rectangle savedWindowSize) {
+    }
 
-    void onInitialize(Path configDirectory);
-
-    void onStopping();
+    record Rectangle(int x, int y, int width, int height) {
+    }
 
 }

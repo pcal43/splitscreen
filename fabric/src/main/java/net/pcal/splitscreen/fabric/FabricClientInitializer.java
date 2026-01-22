@@ -22,33 +22,29 @@
  * THE SOFTWARE.
  */
 
-package net.pcal.splitscreen.mixins;
+package net.pcal.splitscreen.fabric;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.StringWidget;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.network.chat.Component;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.pcal.splitscreen.common.logging.SystemLogger;
+import org.slf4j.LoggerFactory;
+
+import static net.pcal.splitscreen.common.Mod.mod;
+
 
 /**
- * Display the username in the upper left corner so you can tell whose screen is whose.
+ * Initializer that runs in a client.
  *
  * @author pcal
- * @since 0.0.2
+ * @since 0.0.1
  */
-@Mixin(TitleScreen.class)
-public class TitleScreenMixin extends Screen {
-    protected TitleScreenMixin(Component text) {
-        super(text);
-    }
+public class FabricClientInitializer implements ClientModInitializer {
 
-    @Inject(method = "init", at = @At("RETURN"), remap = false)
-    private void addText(CallbackInfo ci) {
-        final Component text = Component.literal(Minecraft.getInstance().getUser().getName());
-        addRenderableWidget(new StringWidget(4, 4, font.width(text), 10, text, this.font));
+    private static final String MOD_ID = "splitscreen";
+
+    @Override
+    public void onInitializeClient() {
+        SystemLogger.Singleton.register(LoggerFactory.getLogger(MOD_ID));
+        mod().onInitialize(FabricLoader.getInstance().getConfigDir());
     }
 }

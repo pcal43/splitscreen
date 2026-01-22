@@ -1,15 +1,13 @@
 package net.pcal.splitscreen.neoforge;
 
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.GameShuttingDownEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 
-import static net.pcal.splitscreen.Mod.mod;
+import static net.pcal.splitscreen.common.Mod.mod;
 
 @Mod("splitscreen")
 public class SplitscreenNeoforgeMod {
@@ -18,22 +16,12 @@ public class SplitscreenNeoforgeMod {
     private static final Path CONFIG_DIR_PATH = Path.of("config");
 
     public SplitscreenNeoforgeMod(IEventBus modBus) {
-        // NOTE: we can't do this in onClientSetup because nefoforge does
+        // NOTE: we can't do this in onClientSetup because neoforge does
         // some early window initialization before that, and that initialization
         // will break our mixins if the config isn't set up.  It seems
         // fairly safe to do it here.
         mod().onInitialize(CONFIG_DIR_PATH);
-        modBus.addListener(SplitscreenNeoforgeMod::onClientStopping);
         LOGGER.info("[Splitscreen] Mod initialized");
-    }
-
-    @SubscribeEvent
-    private static void onClientStopping(final GameShuttingDownEvent event) {
-        try {
-            mod().onStopping();
-        } catch (Throwable t) {
-            LOGGER.error("[Splitscreen] Error during shutdown", t);
-        }
     }
 }
 

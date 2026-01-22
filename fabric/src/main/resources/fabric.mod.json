@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "net.pcal.splitscreen.mod.fabric.FabricClientInitializer"
+      "net.pcal.splitscreen.fabric.FabricClientInitializer"
     ]
   },
   "mixins": [
