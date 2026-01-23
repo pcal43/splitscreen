@@ -1,0 +1,22 @@
+plugins {
+    id 'fabric-loom'
+}
+
+repositories {
+    // FIXME?  Unless we do this, our off-label use of fabric-loom here doesn't work -
+    // it fails to search this repo for spongepowered.  Putting this in settings.gradle
+    // doesn't work - it has to be here.  Not quite sure what the deal is.
+    maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    compileOnly "org.spongepowered:mixin:${project.spongepowered_version}"
+    annotationProcessor "org.spongepowered:mixin:${project.spongepowered_version}:processor"
+}
+
+loom {
+    // skip run configs for common
+    runs {}
+}
