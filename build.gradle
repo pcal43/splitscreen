@@ -20,4 +20,4 @@ subprojects {
     }
 }
 
-apply from: 'gradle/shared/release-build.gradle'
+apply from: "${rootDir}/gradle/shared/release-build.gradle"
