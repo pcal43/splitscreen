@@ -18,8 +18,10 @@ subprojects {
         maven { url = "https://maven.neoforged.net/releases/" }
         mavenCentral()
     }
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 21
+    }
 }
-
 
 // ============================================================================
 // Release Tasks

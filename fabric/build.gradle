@@ -13,18 +13,12 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    // Depend on the common module
-    // For compilation and dev runtime - uses dev jar with proper mappings
     implementation project(":common")
-
-    // DON'T use include - we're merging the classes directly in the jar task instead
-    // This ensures they get remapped together with the fabric module classes
 }
 
 processResources {
+    // Substitute the mod version into fabric.mod.json
     inputs.property "version", project.version
-
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
@@ -32,8 +26,7 @@ processResources {
 
 sourceSets {
     main {
-        // Add common module sources to fabric's main sourceSet
-        // This ensures they're compiled and remapped together
+        // Add common module sources so they're compiled and remapped together
         java {
             srcDir project(":common").file("src/main/java")
         }
@@ -41,13 +34,6 @@ sourceSets {
             srcDir project(":common").file("src/main/resources")
         }
     }
-    test {
-        resources.srcDirs = ["src/test/resources"]
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
 }
 
 loom {
@@ -65,12 +51,6 @@ loom {
             runDir("run")
         }
     }
-}
-
-java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.  If you remove this line, sources will not be generated.
-    withSourcesJar()
 }
 
 jar {
