@@ -20,17 +20,20 @@ base {
     archivesName = "${project.archives_base_name}-neoforge"
 }
 
-neoForge {
-    version = project.neoforge_version
+// groovy
+project.plugins.withId('net.neoforged.moddev') {
+    neoForge {
+        version = project.neoforge_version
 
-    runs {
-        client {
-            type = "client"
-            gameDirectory = file("${project.projectDir}/run")
-        }
-        server {
-            type = "server"
-            gameDirectory = file("${project.projectDir}/run")
+        runs {
+            client {
+                type = "client"
+                gameDirectory = file("${project.projectDir}/run")
+            }
+            server {
+                type = "server"
+                gameDirectory = file("${project.projectDir}/run")
+            }
         }
     }
 }
