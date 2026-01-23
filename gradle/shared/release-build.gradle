@@ -3,6 +3,21 @@
 // Release Tasks
 // ============================================================================
 
+
+allprojects {
+    apply plugin: 'java'
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = "${project.java_version}" as int
+        options.encoding = "UTF-8"
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of("${project.java_version}")
+        }
+    }
+}
+
 /**
  * Validates that the working directory is clean and on the main branch
  */

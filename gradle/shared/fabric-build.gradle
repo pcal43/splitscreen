@@ -9,6 +9,8 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
+        // This has to be on the classpath so we can delcare a task with it below.
+        // The new curseforgegradle plugin does not have a DSL config.
         classpath "net.darkhax.curseforgegradle:CurseForgeGradle:${curseforgegradle_plugin_version}"
     }
 }

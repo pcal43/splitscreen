@@ -15,18 +15,6 @@ loom {
     runs {}
 }
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
-    options.encoding = "UTF-8"
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-    withSourcesJar()
-}
-
 // Don't remap the common jar - the loader-specific modules will handle that
 jar {
     from("LICENSE") {
