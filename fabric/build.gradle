@@ -8,15 +8,6 @@ base {
     archivesName = project.archives_base_name_fabric
 }
 
-version = project.mod_version
-group = project.maven_group
-
-repositories {
-    maven { url = 'https://maven.fabricmc.net/' }
-    maven { url = "https://repo.spongepowered.org/maven/" }
-    mavenCentral()
-}
-
 configurations {
     // Create a configuration for the common module that won't be included in dev
     commonDev

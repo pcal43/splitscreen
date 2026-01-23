@@ -1,15 +1,4 @@
-version = project.mod_version
-group = project.maven_group
 
-allprojects {
-    repositories {
-        maven { url = "https://maven.fabricmc.net/" }
-        // Use both Sponge repository endpoints to ensure mixin artifacts can be found
-        maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
-        maven { url = "https://repo.spongepowered.org/maven/" }
-        mavenCentral()
-    }
-}
 
 // ============================================================================
 // Release Tasks

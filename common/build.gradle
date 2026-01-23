@@ -2,15 +2,6 @@ plugins {
     id 'fabric-loom'
 }
 
-version = project.mod_version
-group = project.maven_group
-
-repositories {
-    maven { url = "https://maven.fabricmc.net/" }
-    maven { url = "https://repo.spongepowered.org/maven/" }
-    mavenCentral()
-}
-
 dependencies {
     // Minecraft classes with Mojang mappings - needed for compilation
     minecraft "com.mojang:minecraft:${project.minecraft_version}"

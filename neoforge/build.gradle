@@ -8,15 +8,6 @@ base {
     archivesName = project.archives_base_name_neoforge
 }
 
-version = project.mod_version
-group = project.maven_group
-
-repositories {
-    mavenCentral()
-    maven { url = 'https://maven.neoforged.net/releases' }
-    maven { url = "https://repo.spongepowered.org/maven/" }
-}
-
 neoForge {
     version = project.neoforge_version
 
