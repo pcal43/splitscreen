@@ -1,8 +1,18 @@
-plugins {
-    id 'fabric-loom'
-    id 'com.modrinth.minotaur'
-    id 'net.darkhax.curseforgegradle' version '1.1.25'
+apply plugin: 'java'
+apply plugin: 'fabric-loom'
+apply plugin: 'com.modrinth.minotaur'
+apply plugin: 'net.darkhax.curseforgegradle'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "net.darkhax.curseforgegradle:CurseForgeGradle:${curseforgegradle_plugin_version}"
+    }
 }
+
 
 base {
     archivesName = "${project.archives_base_name}-fabric"
@@ -24,15 +34,10 @@ processResources {
     }
 }
 
-sourceSets {
-    main {
-        // Add common module sources so they're compiled and remapped together
-        java {
-            srcDir project(":common").file("src/main/java")
-        }
-        resources {
-            srcDir project(":common").file("src/main/resources")
-        }
+project.afterEvaluate {
+    sourceSets.named('main').configure { sourceSet ->
+        sourceSet.java.srcDir(project(":common").file("src/main/java"))
+        sourceSet.resources.srcDir(project(":common").file("src/main/resources"))
     }
 }
 
@@ -76,7 +81,6 @@ modrinth {
 }
 
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
-
 tasks.register('publishCurseForge', TaskPublishCurseForge) {
     // API Key from environment or fallback
     apiToken = System.getenv("CURSEFORGE_TOKEN") ?: 'CURSEFORGE_TOKEN NOT_SET'
