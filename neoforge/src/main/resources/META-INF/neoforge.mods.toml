@@ -1,0 +1,19 @@
+modLoader="javafml"
+loaderVersion="[4.0,)"
+license="MIT"
+
+[[mods]]
+modId="splitscreen"
+version="${version}"
+displayName="Splitscreen Support"
+description="Window positioning assistance for splitscreen play."
+authors=["pcal"]
+logoFile="icon.png"
+
+[[dependencies.splitscreen]]
+modId="neoforge"
+mandatory=true
+versionRange="[21.1,)"
+
+[[mixins]]
+config = "splitscreen.mixins.json"
