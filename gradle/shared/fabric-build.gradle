@@ -5,7 +5,12 @@ plugins {
 }
 
 base {
-    archivesName = "${project.archives_base_name}-fabric"
+    archivesName = project.archives_base_name_fabric
+}
+
+configurations {
+    // Create a configuration for the common module that won't be included in dev
+    commonDev
 }
 
 dependencies {
@@ -65,11 +70,19 @@ loom {
             runDir("run")
         }
     }
+
+    // Common sources are now part of main sourceSet
+    mods {
+        "splitscreen" {
+            sourceSet sourceSets.main
+        }
+    }
 }
 
 java {
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.  If you remove this line, sources will not be generated.
+    // if it is present.
+    // If you remove this line, sources will not be generated.
     withSourcesJar()
 }
 
