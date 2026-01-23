@@ -61,13 +61,6 @@ processResources {
     }
 }
 
-project.afterEvaluate {
-    sourceSets.named('main').configure { sourceSet ->
-        sourceSet.java.srcDir(project(":common").file("src/main/java"))
-        sourceSet.resources.srcDir(project(":common").file("src/main/resources"))
-    }
-}
-
 jar {
     from("LICENSE") {
         rename { "${it}_${archivesName}"}
@@ -78,7 +71,6 @@ jar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }
-
 
 // Publishing configuration
 modrinth {

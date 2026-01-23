@@ -279,8 +279,8 @@ tasks.register('publishModrinth') {
         def releaseVersion = project.ext.releaseVersion
         def gradleCmd = [
                 './gradlew',
-                ':fabric:modrinth',
-                ':neoforge:modrinth',
+                ':fabric:publishModrinth',
+                ':neoforge:publishModrinth',
                 '--console=plain'
         ]
 
