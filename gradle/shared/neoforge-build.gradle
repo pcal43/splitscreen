@@ -35,6 +35,13 @@ project.plugins.withId('net.neoforged.moddev') {
                 gameDirectory = file("${project.projectDir}/run")
             }
         }
+        mods {
+            mobfilter {
+                sourceSet sourceSets.main
+                // Also include common module for resources and classes
+                sourceSet project(":common").sourceSets.main
+            }
+        }
     }
 }
 
@@ -46,13 +53,32 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "version", project.mod_version
     filesMatching("META-INF/neoforge.mods.toml") {
         filter { line ->
-            line.replace('${version}', project.version.toString())
+            line.replace('${version}', project.mod_version.toString())
         }
     }
 }
+
+project.afterEvaluate {
+    sourceSets.named('main').configure { sourceSet ->
+        sourceSet.java.srcDir(project(":common").file("src/main/java"))
+        sourceSet.resources.srcDir(project(":common").file("src/main/resources"))
+    }
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${archivesName}"}
+    }
+
+    // Include common classes directly in the jar
+    from(project(":common").sourceSets.main.output) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}
+
 
 // Publishing configuration
 modrinth {
