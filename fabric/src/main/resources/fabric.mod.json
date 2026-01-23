@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "splitscreen",
+  "version": "${version}",
+  "name": "Splitscreen Support",
+  "description": "Easier Window Positioning for Local Multiplayer",
+  "authors": [
+    "pcal.net"
+  ],
+  "contact": {
+    "homepage": "https://github.com/pcal43/splitscreen",
+    "sources": "https://github.com/pcal43/splitscreen"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.pcal.splitscreen.fabric.FabricClientInitializer"
+    ]
+  },
+  "mixins": [
+    "splitscreen.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "fabric": "*",
+    "minecraft": ">=1.21.10",
+    "java": ">=21"
+  },
+  "conflicts": {}
+}
