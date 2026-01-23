@@ -5,12 +5,7 @@ plugins {
 }
 
 base {
-    archivesName = project.archives_base_name_fabric
-}
-
-configurations {
-    // Create a configuration for the common module that won't be included in dev
-    commonDev
+    archivesName = "${project.archives_base_name}-fabric"
 }
 
 dependencies {
@@ -18,18 +13,12 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    // Depend on the common module
-    // For compilation and dev runtime - uses dev jar with proper mappings
     implementation project(":common")
-
-    // DON'T use include - we're merging the classes directly in the jar task instead
-    // This ensures they get remapped together with the fabric module classes
 }
 
 processResources {
+    // Substitute the mod version into fabric.mod.json
     inputs.property "version", project.version
-
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
@@ -37,8 +26,7 @@ processResources {
 
 sourceSets {
     main {
-        // Add common module sources to fabric's main sourceSet
-        // This ensures they're compiled and remapped together
+        // Add common module sources so they're compiled and remapped together
         java {
             srcDir project(":common").file("src/main/java")
         }
@@ -46,13 +34,6 @@ sourceSets {
             srcDir project(":common").file("src/main/resources")
         }
     }
-    test {
-        resources.srcDirs = ["src/test/resources"]
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
 }
 
 loom {
@@ -70,31 +51,14 @@ loom {
             runDir("run")
         }
     }
-
-    // Common sources are now part of main sourceSet
-    mods {
-        "splitscreen" {
-            sourceSet sourceSets.main
-        }
-    }
-}
-
-java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
-    withSourcesJar()
 }
 
 jar {
+    // copy LICENSE from the repo root and rename it to avoid conflicts with other mods
     from("LICENSE") {
-        rename { "${it}_${project.archives_base_name_fabric}"}
+        rename { "${it}_${archivesName}"}
     }
-    // Common sources are now part of main sourceSet, so they're automatically included
 }
-
-
-
 
 // Publishing configuration
 modrinth {
