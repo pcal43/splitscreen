@@ -74,14 +74,11 @@ java {
 }
 
 jar {
+    // copy LICENSE from the repo root and rename it to avoid conflicts with other mods
     from("LICENSE") {
-        rename { "${it}_${project.archives_base_name_fabric}"}
+        rename { "${it}_${archivesName}"}
     }
-    // Common sources are now part of main sourceSet, so they're automatically included
 }
-
-
-
 
 // Publishing configuration
 modrinth {
