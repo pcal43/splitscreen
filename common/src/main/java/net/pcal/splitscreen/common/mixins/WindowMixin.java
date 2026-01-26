@@ -59,7 +59,7 @@ public abstract class WindowMixin implements MinecraftWindow {
 
     @Final
     @Shadow
-    private long handle;
+    private long window;
     @Shadow
     private int windowedX;
     @Shadow
@@ -107,8 +107,8 @@ public abstract class WindowMixin implements MinecraftWindow {
     }
 
     @Inject(method = "onFramebufferResize(JII)V", at = @At("HEAD"), remap = false)
-    private void splitscreen_onFramebufferSizeChanged(long handle, int width, int height, CallbackInfo ci) {
-        if (handle == this.handle) mod().onResolutionChange(this);
+    private void splitscreen_onFramebufferSizeChanged(long windowHandle, int width, int height, CallbackInfo ci) {
+        if (windowHandle == this.window) mod().onResolutionChange(this);
     }
 
     @Inject(method = "setMode()V", at = @At("HEAD"), remap = false)
@@ -161,8 +161,8 @@ public abstract class WindowMixin implements MinecraftWindow {
                 this.y = this.windowedY;
                 this.width = this.windowedWidth;
                 this.height = this.windowedHeight;
-                GLFW.glfwSetWindowMonitor(this.handle, 0L, this.x, this.y, this.width, this.height, -1);
-                GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, style == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
+                GLFW.glfwSetWindowMonitor(this.window, 0L, this.x, this.y, this.width, this.height, -1);
+                GLFW.glfwSetWindowAttrib(this.window, GLFW_DECORATED, style == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
         }
     }
 }
