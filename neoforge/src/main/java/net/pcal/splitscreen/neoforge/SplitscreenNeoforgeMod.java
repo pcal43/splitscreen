@@ -1,7 +1,9 @@
 package net.pcal.splitscreen.neoforge;
 
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,11 +18,14 @@ public class SplitscreenNeoforgeMod {
     private static final Path CONFIG_DIR_PATH = Path.of("config");
 
     public SplitscreenNeoforgeMod(IEventBus modBus) {
-        // NOTE: we can't do this in onClientSetup because neoforge does
-        // some early window initialization before that, and that initialization
-        // will break our mixins if the config isn't set up.  It seems
-        // fairly safe to do it here.
-        mod().onModInitialize(CONFIG_DIR_PATH);
-        LOGGER.info("[Splitscreen] Mod initialized");
+        modBus.addListener(this::onClientSetup);
+    }
+
+    @SubscribeEvent
+    public void onClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            mod().onModInitialize(CONFIG_DIR_PATH);
+            LOGGER.info("[Splitscreen] Mod initialized");
+        });
     }
 }
