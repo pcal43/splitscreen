@@ -24,7 +24,7 @@
 
 package net.pcal.splitscreen.common.logging;
 
-import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Singleton logger instance that writes to the serverside console.
@@ -61,10 +61,6 @@ public interface SystemLogger {
     }
 
     class Singleton {
-        private static SystemLogger INSTANCE = null;
-
-        public static void register(Logger slf4j) {
-            Singleton.INSTANCE = new Slf4jSystemLogger(slf4j);
-        }
+        private static SystemLogger INSTANCE = new Slf4jSystemLogger(LoggerFactory.getLogger("splitscreen"));
     }
 }
