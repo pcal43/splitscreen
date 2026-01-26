@@ -26,8 +26,6 @@ package net.pcal.splitscreen.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.pcal.splitscreen.common.logging.SystemLogger;
-import org.slf4j.LoggerFactory;
 
 import static net.pcal.splitscreen.common.Mod.mod;
 
@@ -40,11 +38,8 @@ import static net.pcal.splitscreen.common.Mod.mod;
  */
 public class FabricClientInitializer implements ClientModInitializer {
 
-    private static final String MOD_ID = "splitscreen";
-
     @Override
     public void onInitializeClient() {
-        SystemLogger.Singleton.register(LoggerFactory.getLogger(MOD_ID));
         mod().onModInitialize(FabricLoader.getInstance().getConfigDir());
     }
 }
