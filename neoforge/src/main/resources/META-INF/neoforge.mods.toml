@@ -4,7 +4,7 @@ license="MIT"
 
 [[mods]]
 modId="splitscreen"
-version="${version}"
+version="${mod_version}"
 displayName="Splitscreen Support"
 description="Window positioning assistance for splitscreen play."
 authors=["pcal"]
@@ -13,7 +13,7 @@ logoFile="icon.png"
 [[dependencies.splitscreen]]
 modId="neoforge"
 mandatory=true
-versionRange="[21.1,)"
+versionRange="[${neoforge_version},)"
 
 [[mixins]]
 config = "splitscreen.mixins.json"

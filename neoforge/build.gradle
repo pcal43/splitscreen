@@ -42,10 +42,16 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.mod_version
+    inputs.property "mod_version", project.mod_version
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "java_version", project.java_version
+    inputs.property "neoforge_version", project.neoforge_version
     filesMatching("META-INF/neoforge.mods.toml") {
         filter { line ->
-            line.replace('${version}', project.mod_version.toString())
+            line.replace('${mod_version}', project.mod_version.toString())
+                .replace('${minecraft_version}', project.minecraft_version.toString())
+                .replace('${java_version}', project.java_version.toString())
+                .replace('${neoforge_version}', project.neoforge_version.toString())
         }
     }
 }
@@ -87,4 +93,3 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     // Ensure remapJar is finished before this runs
     dependsOn(jar)
 }
-

@@ -19,9 +19,15 @@ dependencies {
 
 processResources {
     // Substitute the mod version into fabric.mod.json
-    inputs.property "version", project.mod_version
+    inputs.property "mod_version", project.mod_version
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "java_version", project.java_version
+    inputs.property "fabric_loader_version", project.fabric_loader_version
     filesMatching("fabric.mod.json") {
-        expand "version": project.mod_version
+        expand "mod_version": project.mod_version,
+               "minecraft_version": project.minecraft_version,
+               "java_version": project.java_version,
+               "fabric_loader_version": project.fabric_loader_version
     }
 }
 

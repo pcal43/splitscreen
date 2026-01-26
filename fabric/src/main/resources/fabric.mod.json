@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "splitscreen",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "Splitscreen Support",
   "description": "Easier Window Positioning for Local Multiplayer",
   "authors": [
@@ -23,10 +23,10 @@
     "splitscreen.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.9",
+    "fabricloader": ">=${fabric_loader_version}",
     "fabric": "*",
-    "minecraft": ">=1.21.10",
-    "java": ">=21"
+    "minecraft": ">=${minecraft_version}",
+    "java": ">=${java_version}"
   },
   "conflicts": {}
 }
