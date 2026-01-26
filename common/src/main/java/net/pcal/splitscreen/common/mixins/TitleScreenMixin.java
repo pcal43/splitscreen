@@ -35,7 +35,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Display the username in the upper left corner so you can tell whose screen is whose.
+ * Display the username in the upper left corner so you can tell whose screen
+ * is whose.
  *
  * @author pcal
  * @since 0.0.2

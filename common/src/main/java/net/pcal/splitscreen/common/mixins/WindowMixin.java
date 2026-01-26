@@ -24,10 +24,14 @@
 
 package net.pcal.splitscreen.common.mixins;
 
-import net.pcal.splitscreen.common.WindowMode.MinecraftWindowContext;
-import net.pcal.splitscreen.common.WindowMode.Rectangle;
-import net.pcal.splitscreen.common.WindowMode.WindowDescription;
-import net.pcal.splitscreen.common.WindowMode.WindowStyle;
+import com.mojang.blaze3d.platform.DisplayData;
+import com.mojang.blaze3d.platform.Monitor;
+import com.mojang.blaze3d.platform.ScreenManager;
+import com.mojang.blaze3d.platform.VideoMode;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.platform.WindowEventHandler;
+import net.pcal.splitscreen.common.MinecraftWindow;
+import net.pcal.splitscreen.common.WindowStyle;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
@@ -46,19 +50,12 @@ import static org.lwjgl.glfw.GLFW.GLFW_DECORATED;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 
-import com.mojang.blaze3d.platform.DisplayData;
-import com.mojang.blaze3d.platform.Monitor;
-import com.mojang.blaze3d.platform.ScreenManager;
-import com.mojang.blaze3d.platform.VideoMode;
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.platform.WindowEventHandler;
-
 /**
  * @author pcal
  * @since 0.0.1
  */
 @Mixin(Window.class)
-public abstract class WindowMixin {
+public abstract class WindowMixin implements MinecraftWindow {
 
     @Final
     @Shadow
@@ -100,73 +97,72 @@ public abstract class WindowMixin {
 
     @Inject(method = "<init>", at = @At(value = "TAIL"), remap = false)
     private void Window(WindowEventHandler eventHandler, ScreenManager monitorTracker, DisplayData settings, String videoMode, String title, CallbackInfo ci) {
-        // ok so the issue seems to be that this triggers a framebuffersizechanged when it normally wouldn't
-        // minecraftclient is listening for it on resolutionChanged and it isn't ready.  so we probably just need to find
-        // a later time to move the window.
-        //splitscreen_repositionWindow(mod().onWindowCreate(splitscreen_getWindowContext()));
+        mod().onWindowCreate(this);
     }
 
     @Inject(method = "toggleFullScreen()V", at = @At("HEAD"), cancellable = true, remap = false)
     public void splitscreen_toggleFullScreen(CallbackInfo ci) {
-        final MinecraftWindowContext res = splitscreen_getWindowContext();
-        if (res != null) {
-            splitscreen_repositionWindow(mod().onToggleFullscreen(res));
-            setMode();
-        }
+        mod().onToggleFullscreen(this);
         ci.cancel();
     }
 
     @Inject(method = "onFramebufferResize(JII)V", at = @At("HEAD"), remap = false)
-    private void onFramebufferSizeChanged(long handle, int width, int height, CallbackInfo ci) {
-        if (handle == this.handle) {
-            final WindowDescription wd = mod().onResolutionChange(splitscreen_getWindowContext());
-            if (wd.style() == WindowStyle.SPLITSCREEN) {
-                splitscreen_repositionWindow(wd);
-            }
-            // if it's not a splitscreen mode, lets just let minecraft handle it
-        }
+    private void splitscreen_onFramebufferSizeChanged(long handle, int width, int height, CallbackInfo ci) {
+        if (handle == this.handle) mod().onResolutionChange(this);
     }
 
     @Inject(method = "setMode()V", at = @At("HEAD"), remap = false)
-    private void splitscreen_updateWindowRegion(CallbackInfo ci) {
-        final WindowDescription wd = mod().onWindowCreate(splitscreen_getWindowContext());
-        splitscreen_repositionWindow(wd);
+    private void splitscreen_setMode(CallbackInfo ci) {
+        mod().onSetMode(this);
     }
 
     // ======================================================================
-    // Private
+    // RepositionableWindow implementation
 
+    @Override
     @Unique
-    private MinecraftWindowContext splitscreen_getWindowContext() {
-        final Monitor monitor = this.findBestMonitor();
-        if (monitor == null) {
-            syslog().warn("could not determine monitor");
-            return null;
-        }
-        final VideoMode videoMode = findBestMonitor().getPreferredVidMode(this.preferredFullscreenVideoMode);
-        final Rectangle currentWindow = new Rectangle(x, y, width, height);
-        return new MinecraftWindowContext(videoMode.getWidth(), videoMode.getHeight(), currentWindow);
+    public Rectangle getWindowBounds() {
+        return new Rectangle(x, y, width, height);
     }
 
+    @Override
     @Unique
-    private void splitscreen_repositionWindow(WindowDescription wd) {
-        switch (wd.style()) {
+    public Rectangle getScreenBounds() {
+        final Monitor monitor = this.findBestMonitor();
+        if (monitor == null) {
+            syslog().warn("Could not determine Monitor");
+            return null;
+        } else {
+            final VideoMode videoMode = monitor.getPreferredVidMode(this.preferredFullscreenVideoMode);
+            if (videoMode == null) {
+                syslog().warn("Could not determine VideoMode");
+                return null;
+            } else {
+                return new Rectangle(0, 0, videoMode.getWidth(), videoMode.getHeight());
+            }
+        }
+    }
+
+    @Override
+    @Unique
+    public void reposition(WindowStyle style, Rectangle newBounds) {
+        switch (style) {
             case FULLSCREEN:
                 this.fullscreen = true;
                 break;
             case WINDOWED:
             case SPLITSCREEN:
                 this.fullscreen = false;
-                this.windowedX = wd.x();
-                this.windowedY = wd.y();
-                this.windowedWidth = wd.width();
-                this.windowedHeight = wd.height();
+                this.windowedX = newBounds.x();
+                this.windowedY = newBounds.y();
+                this.windowedWidth = newBounds.width();
+                this.windowedHeight = newBounds.height();
                 this.x = this.windowedX;
                 this.y = this.windowedY;
                 this.width = this.windowedWidth;
                 this.height = this.windowedHeight;
                 GLFW.glfwSetWindowMonitor(this.handle, 0L, this.x, this.y, this.width, this.height, -1);
-                GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, wd.style() == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
+                GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, style == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
         }
     }
 }

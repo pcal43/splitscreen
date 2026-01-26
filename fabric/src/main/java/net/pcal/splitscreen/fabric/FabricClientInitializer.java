@@ -45,6 +45,6 @@ public class FabricClientInitializer implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         SystemLogger.Singleton.register(LoggerFactory.getLogger(MOD_ID));
-        mod().onInitialize(FabricLoader.getInstance().getConfigDir());
+        mod().onModInitialize(FabricLoader.getInstance().getConfigDir());
     }
 }

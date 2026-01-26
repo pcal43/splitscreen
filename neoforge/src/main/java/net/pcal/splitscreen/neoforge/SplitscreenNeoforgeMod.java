@@ -20,7 +20,7 @@ public class SplitscreenNeoforgeMod {
         // some early window initialization before that, and that initialization
         // will break our mixins if the config isn't set up.  It seems
         // fairly safe to do it here.
-        mod().onInitialize(CONFIG_DIR_PATH);
+        mod().onModInitialize(CONFIG_DIR_PATH);
         LOGGER.info("[Splitscreen] Mod initialized");
     }
 }
