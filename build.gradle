@@ -28,7 +28,7 @@ allprojects {
 
 
 /**
- * Validates that the working directory is clean and on the main branch
+ * Validates that the working directory is clean and on the backports/1.20.6 branch
  */
 tasks.register('validateRelease') {
     group = 'release'
@@ -52,12 +52,12 @@ tasks.register('validateRelease') {
 
         // Check branch
         def currentBranch = 'git rev-parse --abbrev-ref HEAD'.execute().text.trim()
-        if (currentBranch != 'main') {
-            throw new GradleException("Releases must be performed on main. Currently on '${currentBranch}'")
+        if (currentBranch != 'backports/1.20.6') {
+            throw new GradleException("Releases must be performed on backports/1.20.6. Currently on '${currentBranch}'")
         }
 
         println "✓ Working directory is clean"
-        println "✓ On main branch"
+        println "✓ On backports/1.20.6 branch"
     }
 }
 
