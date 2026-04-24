@@ -104,7 +104,7 @@ public class Mod {
                 }
             }
             if (this.unpositionedWindow != null) {
-                // Deal with timing challenge in NeoForge
+                // Deal with timing challenge during initialization
                 repositionWindow(this.unpositionedWindow);
                 unpositionedWindow = null;
             }
@@ -118,7 +118,7 @@ public class Mod {
      */
     public void onWindowCreate(final MinecraftWindow window) {
         if (this.modes == null) {
-            // NeoForge creates the window before the mods are initialized, which makes
+            // Window may be created before mods are initialized, which makes
             // our life slightly harder.
             if (this.unpositionedWindow != null) syslog().error("Multiple windows created?");
             this.unpositionedWindow = requireNonNull(window);
