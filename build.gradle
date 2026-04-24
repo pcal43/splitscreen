@@ -1,7 +1,6 @@
 
 plugins {
-    id 'fabric-loom' version "${fabric_loom_version}" apply false
-    id 'net.neoforged.moddev' version "${neoforge_plugin_version}" apply false
+    id 'net.fabricmc.fabric-loom' version "${fabric_loom_version}" apply false
     id 'com.modrinth.minotaur' version "${minotaur_plugin_version}" apply false
     id 'net.darkhax.curseforgegradle' version "${curseforgegradle_plugin_version}" apply false
 }
@@ -137,12 +136,12 @@ tasks.register('commitReleaseVersion') {
 }
 
 /**
- * Builds the release jars for both Fabric and NeoForge
+ * Builds the release jars for Fabric
  * Runs as separate Gradle invocation to pick up updated gradle.properties
  */
 tasks.register('buildReleaseJars') {
     group = 'release'
-    description = 'Builds Fabric and NeoForge release jars'
+    description = 'Builds Fabric release jars'
 
     doLast {
         def releaseVersion = project.ext.releaseVersion
@@ -155,7 +154,6 @@ tasks.register('buildReleaseJars') {
                 './gradlew',
                 'clean',
                 ':fabric:build',
-                ':neoforge:build',
                 '--console=plain'
         ]
 
@@ -168,7 +166,6 @@ tasks.register('buildReleaseJars') {
 
         println "✓ Built release jars:"
         println "  - fabric/build/libs/${project.archives_base_name}-fabric-${releaseVersion}.jar"
-        println "  - neoforge/build/libs/${project.archives_base_name}-neoforge-${releaseVersion}.jar"
     }
 }
 
@@ -195,10 +192,8 @@ tasks.register('publishGitHub') {
         def currentBranch = 'git branch --show-current'.execute().text.trim()
 
         def fabricJar = file("fabric/build/libs/${project.archives_base_name}-fabric-${releaseVersion}.jar")
-        def neoforgeJar = file("neoforge/build/libs/${project.archives_base_name}-neoforge-${releaseVersion}.jar")
 
         if (!fabricJar.exists()) throw new GradleException("Fabric release jar not found at ${fabricJar}")
-        if (!neoforgeJar.exists()) throw new GradleException("NeoForge release jar not found at ${neoforgeJar}")
 
         def ghCmd = [
                 'gh', 'release', 'create',
@@ -207,8 +202,7 @@ tasks.register('publishGitHub') {
                 '--title', releaseVersion,
                 '--notes', "release ${releaseVersion}",
                 releaseVersion,
-                fabricJar.absolutePath,
-                neoforgeJar.absolutePath
+                fabricJar.absolutePath
         ]
 
         def ghResult = ghCmd.execute()
@@ -222,7 +216,7 @@ tasks.register('publishGitHub') {
 }
 
 /**
- * Publishes to CurseForge for both Fabric and NeoForge
+ * Publishes to CurseForge for Fabric
  * Runs as separate Gradle invocation to use updated gradle.properties
  */
 tasks.register('publishCurseForge') {
@@ -236,7 +230,6 @@ tasks.register('publishCurseForge') {
         def gradleCmd = [
                 './gradlew',
                 ':fabric:publishCurseforge',
-                ':neoforge:publishCurseforge',
                 '--console=plain'
         ]
 
@@ -252,7 +245,7 @@ tasks.register('publishCurseForge') {
 }
 
 /**
- * Publishes to Modrinth for both Fabric and NeoForge
+ * Publishes to Modrinth for Fabric
  * Runs as separate Gradle invocation to use updated gradle.properties
  */
 tasks.register('modrinth') {
@@ -266,7 +259,6 @@ tasks.register('modrinth') {
         def gradleCmd = [
                 './gradlew',
                 ':fabric:modrinth',
-                ':neoforge:modrinth',
                 '--console=plain'
         ]
 
