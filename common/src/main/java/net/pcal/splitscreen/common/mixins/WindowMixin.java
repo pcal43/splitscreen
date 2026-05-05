@@ -26,11 +26,9 @@ package net.pcal.splitscreen.common.mixins;
 
 import com.mojang.blaze3d.platform.DisplayData;
 import com.mojang.blaze3d.platform.Monitor;
-import com.mojang.blaze3d.platform.ScreenManager;
 import com.mojang.blaze3d.platform.VideoMode;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.platform.WindowEventHandler;
-import com.mojang.blaze3d.systems.BackendCreationException;
 import com.mojang.blaze3d.systems.GpuBackend;
 import net.pcal.splitscreen.common.MinecraftWindow;
 import net.pcal.splitscreen.common.WindowStyle;
