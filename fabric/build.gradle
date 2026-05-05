@@ -43,6 +43,9 @@ project.afterEvaluate {
 }
 
 loom {
+    mixin {
+        defaultRefmapName = "splitscreen.refmap.json"
+    }
     runs {
         client {
             client()

@@ -15,4 +15,8 @@ dependencies {
     annotationProcessor "org.spongepowered:mixin:${project.spongepowered_version}:processor"
 }
 
-
+loom {
+	runs {
+		// No run configurations needed for common module
+	}
+}

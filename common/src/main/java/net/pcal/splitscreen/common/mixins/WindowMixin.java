@@ -30,6 +30,8 @@ import com.mojang.blaze3d.platform.ScreenManager;
 import com.mojang.blaze3d.platform.VideoMode;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.platform.WindowEventHandler;
+import com.mojang.blaze3d.systems.BackendCreationException;
+import com.mojang.blaze3d.systems.GpuBackend;
 import net.pcal.splitscreen.common.MinecraftWindow;
 import net.pcal.splitscreen.common.WindowStyle;
 import org.jetbrains.annotations.Nullable;
@@ -59,7 +61,7 @@ public abstract class WindowMixin implements MinecraftWindow {
 
     @Final
     @Shadow
-    private long window;
+    private long handle;
     @Shadow
     private int windowedX;
     @Shadow
@@ -96,7 +98,7 @@ public abstract class WindowMixin implements MinecraftWindow {
     // Mixins
 
     @Inject(method = "<init>", at = @At(value = "TAIL"), remap = false)
-    private void Window(WindowEventHandler eventHandler, ScreenManager monitorTracker, DisplayData settings, String videoMode, String title, CallbackInfo ci) {
+    private void Window(WindowEventHandler eventHandler, DisplayData displayData, String fullscreenVideoModeString, String title, final GpuBackend backend, CallbackInfo ci) {
         mod().onWindowCreate(this);
     }
 
@@ -108,7 +110,7 @@ public abstract class WindowMixin implements MinecraftWindow {
 
     @Inject(method = "onFramebufferResize(JII)V", at = @At("HEAD"), remap = false)
     private void splitscreen_onFramebufferSizeChanged(long windowHandle, int width, int height, CallbackInfo ci) {
-        if (windowHandle == this.window) mod().onResolutionChange(this);
+        if (windowHandle == this.handle) mod().onResolutionChange(this);
     }
 
     @Inject(method = "setMode()V", at = @At("HEAD"), remap = false)
@@ -161,8 +163,8 @@ public abstract class WindowMixin implements MinecraftWindow {
                 this.y = this.windowedY;
                 this.width = this.windowedWidth;
                 this.height = this.windowedHeight;
-                GLFW.glfwSetWindowMonitor(this.window, 0L, this.x, this.y, this.width, this.height, -1);
-                GLFW.glfwSetWindowAttrib(this.window, GLFW_DECORATED, style == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
+                GLFW.glfwSetWindowMonitor(this.handle, 0L, this.x, this.y, this.width, this.height, -1);
+                GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, style == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
         }
     }
 }
