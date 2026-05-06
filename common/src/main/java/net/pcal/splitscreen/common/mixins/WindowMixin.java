@@ -26,10 +26,10 @@ package net.pcal.splitscreen.common.mixins;
 
 import com.mojang.blaze3d.platform.DisplayData;
 import com.mojang.blaze3d.platform.Monitor;
-import com.mojang.blaze3d.platform.ScreenManager;
 import com.mojang.blaze3d.platform.VideoMode;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.platform.WindowEventHandler;
+import com.mojang.blaze3d.systems.GpuBackend;
 import net.pcal.splitscreen.common.MinecraftWindow;
 import net.pcal.splitscreen.common.WindowStyle;
 import org.jetbrains.annotations.Nullable;
@@ -96,7 +96,7 @@ public abstract class WindowMixin implements MinecraftWindow {
     // Mixins
 
     @Inject(method = "<init>", at = @At(value = "TAIL"), remap = false)
-    private void Window(WindowEventHandler eventHandler, ScreenManager monitorTracker, DisplayData settings, String videoMode, String title, CallbackInfo ci) {
+    private void Window(WindowEventHandler eventHandler, DisplayData displayData, String fullscreenVideoModeString, String title, final GpuBackend backend, CallbackInfo ci) {
         mod().onWindowCreate(this);
     }
 

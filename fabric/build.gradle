@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'fabric-loom'
+	id 'net.fabricmc.fabric-loom'
     id 'com.modrinth.minotaur'
     id 'net.darkhax.curseforgegradle'
 }
@@ -9,11 +9,15 @@ base {
     archivesName = "${project.archives_base_name}-fabric-${project.mod_version}"
 }
 
+repositories {
+	maven { url = "https://maven.fabricmc.net/" }
+	mavenCentral()
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    implementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     implementation project(":common")
 }
 
@@ -39,6 +43,9 @@ project.afterEvaluate {
 }
 
 loom {
+    mixin {
+        defaultRefmapName = "splitscreen.refmap.json"
+    }
     runs {
         client {
             client()
@@ -64,35 +71,37 @@ jar {
 
 // Publishing configuration
 modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    projectId = "${project.modrinth_projectId}"
-    versionNumber = project.mod_version
-    versionType = "release"
-    uploadFile = remapJar
-    changelog = "<p><a href='${project.github_projectUrl}/releases/tag/${project.mod_version}'>${project.github_projectUrl}/releases/tag/${project.mod_version}</a></p>"
-    gameVersions = ["${project.minecraft_version}"]
-    loaders = ["fabric"]
-    dependencies {
-        required.project "fabric-api"
-    }
+        token = System.getenv("MODRINTH_TOKEN")
+        projectId = project.modrinth_projectId
+        versionNumber = project.mod_version
+        versionName = "${project.mod_version} (fabric)"
+        versionType = "release"
+        uploadFile = jar
+        changelog = "<p><a href='${project.github_projectUrl}/releases/tag/${project.mod_version}'>${project.github_projectUrl}/releases/tag/${project.mod_version}</a></p>"
+        gameVersions = [ project.minecraft_version ]
+        loaders = ["fabric"]
+        dependencies {
+                required.project "fabric-api"
+        }
 }
 
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 tasks.register('publishCurseForge', TaskPublishCurseForge) {
-    // API Key from environment or fallback
-    apiToken = System.getenv("CURSEFORGE_TOKEN") ?: 'CURSEFORGE_TOKEN NOT_SET'
+        // API Key from environment or fallback
+        apiToken = System.getenv("CURSEFORGE_TOKEN") ?: 'CURSEFORGE_TOKEN NOT_SET'
 
-    // Configure the main artifact
-    // The plugin automatically detects Fabric & Java version from your Loom setup
-    def mainFile = upload(project.curseforge_projectId, remapJar)
+        // Configure the main artifact
+        // The plugin automatically detects Fabric & Java version from your Loom setup
+        def mainFile = upload(project.curseforge_projectId, jar)
 
-    mainFile.releaseType = "release"
-    mainFile.changelog = "${project.github_projectUrl}/releases/tag/${project.mod_version}"
-    mainFile.changelogType = "markdown"
+        mainFile.releaseType = "release"
+        mainFile.changelog = "${project.github_projectUrl}/releases/tag/${project.mod_version}"
+        mainFile.changelogType = "markdown"
 
-    mainFile.addGameVersion(project.minecraft_version)
-    mainFile.addModLoader("Fabric")
+        mainFile.addGameVersion(project.minecraft_version)
+        mainFile.addModLoader("Fabric")
 
-    // Ensure remapJar is finished before this runs
-    dependsOn(remapJar)
+        // Ensure jar is finished before this runs
+        dependsOn(jar)
 }
