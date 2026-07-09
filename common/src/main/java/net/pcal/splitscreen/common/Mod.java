@@ -61,13 +61,14 @@ public class Mod {
     private static final String MODE_PROP = "mode";
     private static final String GAP_PROP = "gap";
 
-    private MinecraftWindow unpositionedWindow;
+    private MinecraftWindow pendingWindow;
     private List<WindowMode> modes;
     private int gap = 1;
     private Properties config;
     private Path configPath;
     private int currentModeIndex = 0;
     private Rectangle savedWindowRect;
+    private boolean initialPositionApplied;
 
     // ======================================================================
     // Public methods
@@ -103,11 +104,6 @@ public class Mod {
                     currentModeIndex = 0;
                 }
             }
-            if (this.unpositionedWindow != null) {
-                // Deal with timing challenge in NeoForge
-                repositionWindow(this.unpositionedWindow);
-                unpositionedWindow = null;
-            }
         } catch (Exception e) {
             syslog().error(e);
         }
@@ -117,14 +113,23 @@ public class Mod {
      * Called when the minecraft window is created.
      */
     public void onWindowCreate(final MinecraftWindow window) {
-        if (this.modes == null) {
-            // NeoForge creates the window before the mods are initialized, which makes
-            // our life slightly harder.
-            if (this.unpositionedWindow != null) syslog().error("Multiple windows created?");
-            this.unpositionedWindow = requireNonNull(window);
-        } else {
-            repositionWindow(window);
-        }
+        // 26.2 can fire framebuffer resize callbacks during Window construction.
+        // Delay the initial reposition until a later UI hook when Minecraft.window exists.
+        if (this.pendingWindow != null && this.pendingWindow != window) syslog().error("Multiple windows created?");
+        this.pendingWindow = requireNonNull(window);
+    }
+
+    /**
+     * Called once the title screen is initializing and the client window is safe
+     * to manipulate.
+     */
+    public void onUiReady(final MinecraftWindow window) {
+        if (this.initialPositionApplied) return;
+        final MinecraftWindow target = window != null ? window : this.pendingWindow;
+        if (target == null || this.modes == null) return;
+        repositionWindow(target);
+        this.pendingWindow = null;
+        this.initialPositionApplied = true;
     }
 
     /**

@@ -34,6 +34,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static net.pcal.splitscreen.common.Mod.mod;
+
 /**
  * Display the username in the upper left corner so you can tell whose screen
  * is whose.
@@ -49,6 +51,7 @@ public class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("RETURN"), remap = false)
     private void addText(CallbackInfo ci) {
+        mod().onUiReady((net.pcal.splitscreen.common.MinecraftWindow) (Object) Minecraft.getInstance().getWindow());
         final Component text = Component.literal(Minecraft.getInstance().getUser().getName());
         addRenderableWidget(new StringWidget(4, 4, font.width(text), 10, text, this.font));
     }
