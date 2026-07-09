@@ -75,17 +75,17 @@ record WindowMode(
         final List<WindowMode> modes = new ArrayList<>();
         addMode(modes, "WINDOWED", WINDOWED, r -> r.getWindowBounds().x(), r -> r.getWindowBounds().y(),
                 r -> r.getWindowBounds().width(), r -> r.getWindowBounds().height());
-        addMode(modes, "LEFT", SPLITSCREEN, r -> 0, r -> 0, r -> r.getScreenBounds().width() / 2 - gap, r -> r.getScreenBounds().height());
-        addMode(modes, "RIGHT", SPLITSCREEN, r -> r.getScreenBounds().width() / 2 + gap, r -> 0, r -> r.getScreenBounds().width() / 2 - gap, r -> r.getScreenBounds().height());
-        addMode(modes, "TOP", SPLITSCREEN, r -> 0, r -> 0, r -> r.getScreenBounds().width(), r -> r.getScreenBounds().height() / 2 - gap);
-        addMode(modes, "BOTTOM", SPLITSCREEN, r -> 0, r -> r.getScreenBounds().height() / 2 + gap, r -> r.getScreenBounds().width(), r -> r.getScreenBounds().height() / 2 - gap);
-        addMode(modes, "TOP_LEFT", SPLITSCREEN, r -> 0, r -> 0,
+        addMode(modes, "LEFT", SPLITSCREEN, r -> r.getScreenBounds().x(), r -> r.getScreenBounds().y(), r -> r.getScreenBounds().width() / 2 - gap, r -> r.getScreenBounds().height());
+        addMode(modes, "RIGHT", SPLITSCREEN, r -> r.getScreenBounds().x() + r.getScreenBounds().width() / 2 + gap, r -> r.getScreenBounds().y(), r -> r.getScreenBounds().width() / 2 - gap, r -> r.getScreenBounds().height());
+        addMode(modes, "TOP", SPLITSCREEN, r -> r.getScreenBounds().x(), r -> r.getScreenBounds().y(), r -> r.getScreenBounds().width(), r -> r.getScreenBounds().height() / 2 - gap);
+        addMode(modes, "BOTTOM", SPLITSCREEN, r -> r.getScreenBounds().x(), r -> r.getScreenBounds().y() + r.getScreenBounds().height() / 2 + gap, r -> r.getScreenBounds().width(), r -> r.getScreenBounds().height() / 2 - gap);
+        addMode(modes, "TOP_LEFT", SPLITSCREEN, r -> r.getScreenBounds().x(), r -> r.getScreenBounds().y(),
                 r -> r.getScreenBounds().width() / 2 - gap, r -> r.getScreenBounds().height() / 2 - gap);
-        addMode(modes, "TOP_RIGHT", SPLITSCREEN, r -> r.getScreenBounds().width() / 2 + gap, r -> 0,
+        addMode(modes, "TOP_RIGHT", SPLITSCREEN, r -> r.getScreenBounds().x() + r.getScreenBounds().width() / 2 + gap, r -> r.getScreenBounds().y(),
                 r -> r.getScreenBounds().width() / 2 - gap, r -> r.getScreenBounds().height() / 2 - gap);
-        addMode(modes, "BOTTOM_LEFT", SPLITSCREEN, r -> 0, r -> r.getScreenBounds().height() / 2 + gap,
+        addMode(modes, "BOTTOM_LEFT", SPLITSCREEN, r -> r.getScreenBounds().x(), r -> r.getScreenBounds().y() + r.getScreenBounds().height() / 2 + gap,
                 r -> r.getScreenBounds().width() / 2 - gap, r -> r.getScreenBounds().height() / 2 - gap);
-        addMode(modes, "BOTTOM_RIGHT", SPLITSCREEN, r -> r.getScreenBounds().width() / 2 + gap, r -> r.getScreenBounds().height() / 2 + gap,
+        addMode(modes, "BOTTOM_RIGHT", SPLITSCREEN, r -> r.getScreenBounds().x() + r.getScreenBounds().width() / 2 + gap, r -> r.getScreenBounds().y() + r.getScreenBounds().height() / 2 + gap,
                 r -> r.getScreenBounds().width() / 2 - gap, r -> r.getScreenBounds().height() / 2 - gap);
         addMode(modes, "FULLSCREEN", FULLSCREEN, no(), no(), no(), no());
         return modes;

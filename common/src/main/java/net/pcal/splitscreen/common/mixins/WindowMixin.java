@@ -26,6 +26,7 @@ package net.pcal.splitscreen.common.mixins;
 
 import com.mojang.blaze3d.platform.DisplayData;
 import com.mojang.blaze3d.platform.Monitor;
+import com.mojang.blaze3d.platform.MonitorManager;
 import com.mojang.blaze3d.platform.VideoMode;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.platform.WindowEventHandler;
@@ -96,7 +97,7 @@ public abstract class WindowMixin implements MinecraftWindow {
     // Mixins
 
     @Inject(method = "<init>", at = @At(value = "TAIL"), remap = false)
-    private void Window(WindowEventHandler eventHandler, DisplayData displayData, String fullscreenVideoModeString, String title, final GpuBackend backend, CallbackInfo ci) {
+    private void Window(WindowEventHandler eventHandler, DisplayData displayData, String fullscreenVideoModeString, boolean exclusiveFullscreen, String title, MonitorManager monitorManager, final GpuBackend backend, CallbackInfo ci) {
         mod().onWindowCreate(this);
     }
 
@@ -138,7 +139,7 @@ public abstract class WindowMixin implements MinecraftWindow {
                 syslog().warn("Could not determine VideoMode");
                 return null;
             } else {
-                return new Rectangle(0, 0, videoMode.getWidth(), videoMode.getHeight());
+                return new Rectangle(monitor.x(), monitor.y(), videoMode.getWidth(), videoMode.getHeight());
             }
         }
     }
