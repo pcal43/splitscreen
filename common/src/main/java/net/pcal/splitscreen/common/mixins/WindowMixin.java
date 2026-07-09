@@ -26,6 +26,7 @@ package net.pcal.splitscreen.common.mixins;
 
 import com.mojang.blaze3d.platform.DisplayData;
 import com.mojang.blaze3d.platform.Monitor;
+import com.mojang.blaze3d.platform.MonitorManager;
 import com.mojang.blaze3d.platform.VideoMode;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.platform.WindowEventHandler;
@@ -96,7 +97,7 @@ public abstract class WindowMixin implements MinecraftWindow {
     // Mixins
 
     @Inject(method = "<init>", at = @At(value = "TAIL"), remap = false)
-    private void Window(WindowEventHandler eventHandler, DisplayData displayData, String fullscreenVideoModeString, String title, final GpuBackend backend, CallbackInfo ci) {
+    private void Window(WindowEventHandler eventHandler, DisplayData displayData, String fullscreenVideoModeString, boolean exclusiveFullscreen, String title, MonitorManager monitorManager, final GpuBackend backend, CallbackInfo ci) {
         mod().onWindowCreate(this);
     }
 
@@ -109,11 +110,6 @@ public abstract class WindowMixin implements MinecraftWindow {
     @Inject(method = "onFramebufferResize(JII)V", at = @At("HEAD"), remap = false)
     private void splitscreen_onFramebufferSizeChanged(long handle, int width, int height, CallbackInfo ci) {
         if (handle == this.handle) mod().onResolutionChange(this);
-    }
-
-    @Inject(method = "setMode()V", at = @At("HEAD"), remap = false)
-    private void splitscreen_setMode(CallbackInfo ci) {
-        mod().onSetMode(this);
     }
 
     // ======================================================================
@@ -138,7 +134,7 @@ public abstract class WindowMixin implements MinecraftWindow {
                 syslog().warn("Could not determine VideoMode");
                 return null;
             } else {
-                return new Rectangle(0, 0, videoMode.getWidth(), videoMode.getHeight());
+                return new Rectangle(monitor.x(), monitor.y(), videoMode.getWidth(), videoMode.getHeight());
             }
         }
     }
@@ -149,6 +145,7 @@ public abstract class WindowMixin implements MinecraftWindow {
         switch (style) {
             case FULLSCREEN:
                 this.fullscreen = true;
+                this.setMode();
                 break;
             case WINDOWED:
             case SPLITSCREEN:
@@ -163,6 +160,8 @@ public abstract class WindowMixin implements MinecraftWindow {
                 this.height = this.windowedHeight;
                 GLFW.glfwSetWindowMonitor(this.handle, 0L, this.x, this.y, this.width, this.height, -1);
                 GLFW.glfwSetWindowAttrib(this.handle, GLFW_DECORATED, style == WindowStyle.WINDOWED ? GLFW_TRUE : GLFW_FALSE);
+                GLFW.glfwShowWindow(this.handle);
+                GLFW.glfwFocusWindow(this.handle);
         }
     }
 }
